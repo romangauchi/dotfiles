@@ -1,0 +1,185 @@
+#!/bin/bash
+
+# Colors
+alias     ls='ls    --color=auto --time-style=long-iso --group-directories-first'
+alias   grep='grep  --color=auto'
+alias  fgrep='fgrep --color=auto'
+alias  egrep='egrep --color=auto'
+alias  zgrep='zgrep --color=auto'
+alias   less='less -FRX'
+if [[ -x "$(which colordiff 2>/dev/null)" ]];then alias  diff='colordiff' ; fi
+
+# Builtins
+alias     rm='rm -i'    # i: prompt before every removal
+alias     cp='cp -ip'   # i: prompt before overwrite, p: preserve timestamps (date)
+alias     mv='mv -i'    # i: prompt before overwrite
+alias  mkdir='mkdir -p' # p: make parent directories as needed
+
+alias     ..='cd ..'
+alias    ...='cd ../..'
+alias   ....='cd ../../..'
+alias  .....='cd ../../../..'
+alias ......='cd ../../../../..'
+alias    cd.='cd ..'
+alias   cd..='cd ..'
+alias      f='finger -s'
+alias      h='history'
+alias      j='ps'
+alias      l='ls'
+alias     ll='ls -lh'
+alias     la='ls -lha'
+alias     lt='ls -lhtr'
+alias   llog='journalctl -xn'
+alias     tt='tree -ACF'
+alias    ttd='tt -d'
+alias   path='echo $PATH'
+
+alias    duh='du -shc ~/* | sort -n'
+alias    dul='du -shc ./* | sort -n'
+alias   dula='du -sh .[^.]* | sort -h'
+
+alias   dirs='dirs -v'
+alias     pu='pushd'
+alias     po='popd'
+
+# Git
+alias     ga='git add'
+alias    gam='git add -u'
+alias    gaa='git add -A'
+alias     gb='git branch'
+alias     gc='git checkout'
+alias     gd='git diff'
+alias     gl='git lg'
+alias    gcm='git commit -m'
+alias     gp='git push'
+alias   gpom='git push origin master'
+alias    gpo='git branch | grep "^\*" | cut -d" " -f2 | xargs git push origin'
+alias    gpl='git pull'
+alias  gplom='git pull origin master'
+alias   gplo='git branch | grep "^\*" | cut -d" " -f2 | xargs git pull origin'
+alias    gst='git status'
+alias    gsb='git status -b'
+alias    gsl='git stash list'
+alias     gr='git repo && cd `git root` || git root'
+
+# Tmux
+alias     tl='tmux list-session'
+alias     tn='tmux new-session'
+alias     tw='tmux new-window'
+alias     ts='tmux split-window'
+alias   tvim='tmux split-window vim'
+
+# Custom
+alias     po='poweroff'
+alias      a='cat ~/.bash/aliases'
+alias     aa='vim ~/.bash/bashrc.perso'
+alias    aaa='source ~/.bashrc'
+alias     vv='vim ~/.vimrc'
+alias     ae='source bin/activate'
+alias     de='deactivate'
+
+# Web researches 
+alias  google='web_search google'
+alias     ddg='web_search ddg'
+alias  github='web_search github'
+alias    wiki='web_search ddg \!w'
+alias    news='web_search ddg \!n'
+alias youtube='web_search ddg \!yt'
+alias     map='web_search ddg \!m'
+alias   image='web_search ddg \!i'
+
+# Others stuffs
+alias  whatip='curl -s http://whatismyip.akamai.com; echo'
+alias weather='curl fr.wttr.in/grenoble'
+
+# LaTeX
+alias lpdf='pdflatex -shell-escape'
+pdfmerge () { out=$1 ; shift ; ghostscript -dNOPAUSE -sDEVICE=pdfwrite -dBATCH -sOUTPUTFILE=$out "$@" ; }
+
+# Vim
+cleanvim () { find $* -name ".*.sw*" -delete ; }
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='echo -en "\007"'
+
+# vtar
+vtarc () { tar cvzf - $@ | env -u LC_ALL LANG=C gvim --servername vtar -bf -u NONE -c 'set binary noeol | normal GA.' -c 'normal gg0vG$h"+y' -c 'stop' - ; }
+vtarx () { env -u LC_ALL LANG=C gvim -bf -u NONE -c 'set binary noeol | normal "+pG$dl' -c '% ! tar xvzf -' -c 'set eol | write >>/dev/stdout | quit! ' ; gvim --servername vtar --remote-send ':qa! <CR>' ; }
+
+# find
+find_gt  () { find $1 -size +$2 ${@:3} -exec ls -lh {} \; | awk '{ print $9 " : " $5 }' ; }
+find_lt  () { find $1 -size -$2 ${@:3} -exec ls -lh {} \; | awk '{ print $9 " : " $5 }' ; }
+find_dupes () { list=$(mktemp) ; find "$@" -type f -exec md5sum {} \; > $list ; for d in $(find "$@" -type f -exec md5sum {} \; | cut -d" " -f1 | sort | uniq -d); do grep $d $list | cut -d" " -f3 ; echo ------------------------- ; done ; rm $list ; }
+
+# screen
+screenls      () { screen -ls ; }
+screenkill    () { while [ $# -ne 0 ]; do screen -X -S $1 quit ; shift ; done ; }
+screenkillall () { screen -ls | grep "(" | awk '{print $1}' | xargs -I'{}' screen -X -S {} quit ; }
+svim          () { screen -X split ; screen -X focus ; screen -t "vim" sh -c "vim $@ ; screen -X focus ; screen -X only" ; }
+
+# dictionnaire
+dict () { curl -s dict://dict.org/d:$1:$2 | perl -ne 's/\r//; print if /^151 /../^\./ and not (/^151 / or /^\./)' ; }
+dict-wordnet   () { dict $1 wn ; }
+dict-thesaurus () { dict $1 moby-thesaurus ; }
+dict-fr-en     () { dict $1 fd-fra-eng ; }
+dict-en-fr     () { dict $1 fd-eng-fra ; }
+tlfi () { lynx -dump http://www.cnrtl.fr/definition/$1 | awk '/\]options d.affichage/,/XHTML/ {print}' | perl -ne 'print unless 1../^$/ or eof' ; }
+
+# title
+title   () { echo -ne "\e]0;$@\a" ; if [[ -n "$TMUX" ]]; then tmux renamew $@ ; tmux setw automatic-rename off ; fi }
+notitle () { echo -ne "\e]0;\a"   ; if [[ -n "$TMUX" ]]; then tmux setw automatic-rename on ; fi }
+
+# Perl
+whereisperlmodule () {
+  which perldoc &> /dev/null && {
+    perldoc -lm $*
+  } || {
+    perl -e 'foreach (@ARGV) { s/::/\//g,s/$/.pm/ ; if ( require $_ ) { print $INC{$_} . "\n" }}' $*
+  }
+}
+
+# Web search from terminal
+web_search() {
+  # define search engine URLS
+  declare -A urls=(
+    ["google"]="https://www.google.com/search?q="
+    ["ddg"]="https://www.duckduckgo.com/?q="
+    ["github"]="https://github.com/search?q="
+  )
+  # check whether the search engine is supported
+  if [[ -z "${urls[$1]}" ]]; then echo "Search engine $1 not supported."; return 1 ; fi
+  # search or go to main page depending on number of arguments passed
+  local args="${@:2}"
+  # join arguments passed with '+', then append to search engine URL
+  local url="${urls[$1]}${args// /+}"
+  # open the url and the request
+  open_command "$url"
+}
+
+# Use generalized open command
+open_command() {
+  local open_cmd
+  # define the open command
+  case "$OSTYPE" in
+    darwin*)  open_cmd='open' ;;
+    cygwin*)  open_cmd='cygstart' ;;
+    linux*)   open_cmd='xdg-open' ;;
+    msys*)    open_cmd='start ""' ;;
+    *)        echo "Platform $OSTYPE not supported"
+              return 1
+              ;;
+  esac
+  # don't use nohup on OSX
+  if [[ "$OSTYPE" == darwin* ]]; then
+    $open_cmd "$@" &>/dev/null
+  else
+    nohup $open_cmd "$@" &>/dev/null
+  fi
+}
+
+# Cleanup env vars
+prepend  () { if [[ -n "$1"        ]];then export $1="$(perl -e '@items=split(":",$ENV{shift @ARGV});for $arg (reverse @ARGV){@items=grep{$_ ne $arg} @items; unshift @items,$arg}; print(join(":",@items))' "$@" )" ; fi }
+append   () { if [[ -n "$1"        ]];then export $1="$(perl -e '@items=split(":",$ENV{shift @ARGV});for $arg (        @ARGV){@items=grep{$_ ne $arg} @items; push    @items,$arg}; print(join(":",@items))' "$@" )" ; fi }
+remove   () { if [[ -n "${!1+set}" ]];then export $1="$(perl -e '@items=split(":",$ENV{shift @ARGV});for $arg (reverse @ARGV){@items=grep{$_ ne $arg} @items;                    }; print(join(":",@items))' "$@" )" ; fi }
+uniquify () { if [[ -n "${!1+set}" ]];then export $1="$(perl -e '   for(split(":",$ENV{shift @ARGV})){unless(defined$list{$_}){$list{$_}=1;                   push    @items,$_ }}; print(join(":",@items))' "$@" )" ; fi }

@@ -1,0 +1,139 @@
+#!/usr/bin/bash
+
+#####################################
+# Prompt coloré
+#####################################
+
+source ~/.bash/colors
+
+if [ "$powerline" == "1" ]; then
+  SEPI=""
+  SEPO=""
+  GITB=""
+  SIGN=""
+else
+  SEPI=""
+  SEPO=""
+  GITB=""
+  SIGN=' >'
+fi
+
+### Left airline prompt
+USER_FG="${termcap_fg_white}"
+USER_BG="${termcap_bg_usr}"
+USER_END="${termcap_fg_usr}"
+HOST_FG="${termcap_fg_black}"
+HOST_BG="${termcap_bg_green}"
+HOST_END="${termcap_fg_green}"
+# SHELL_FG="${termcap_fg_black}"
+# SHELL_BG="${termcap_bg_yellow}"
+# SHELL_END="${termcap_fg_yellow}"
+DIR_FG="${termcap_fg_yellow}"
+DIR_BG="${termcap_restore}"
+DIR_END="${termcap_restore}"
+
+### Right airline prompt
+GIT_CLEAN_FG="${termcap_fg_black}"
+GIT_CLEAN_BG="${termcap_bg_green}"
+GIT_CLEAN_END="${termcap_fg_green}"
+GIT_UNTRACKED_FG="${termcap_fg_black}"
+GIT_UNTRACKED_BG="${termcap_bg_yellow}"
+GIT_UNTRACKED_END="${termcap_fg_yellow}"
+GIT_MODIFIED_FG="${termcap_fg_black}"
+GIT_MODIFIED_BG="${termcap_bg_orange}"
+GIT_MODIFIED_END="${termcap_fg_orange}"
+VENV_FG="${termcap_fg_black}"
+VENV_BG="${termcap_bg_blue}"
+VENV_END="${termcap_fg_blue}"
+
+### Left prompt
+STATUS_FG="${prompt_fg_white}"
+STATUS_BG="${prompt_bg_orange}"
+STATUS_END="${prompt_fg_orange}"
+TEXT_BG="${prompt_restore}"
+TEXT_FG="${prompt_restore}"
+
+# useful functions
+displayed_char_count () { echo -en "$1" | sed 's+\[[0-9;]*[mJ]++g' | wc -m ; }
+display_path () {
+    local p=`pwd|sed -r 's|^'"${HOME}"'(.*)$|~\1|'`;
+    # TODO: to improve using `dirs` command
+    [[ $1 -gt $(echo $p|wc -m) ]] && {
+        echo $p;
+    } || { 
+        echo $p|tail -c$(($1-5))|sed "s/^/[..]/"; 
+    }
+}
+airline_left () { echo -en "$2$3 $1 $4$5${SEPI}" ; }
+airline_right () { echo -en "$2${SEPO}$3$4 $1 $5" ; }
+
+# display after prompt
+preexec() {
+  unset prompted
+}
+
+# display before prompt
+precmd() {
+  prompted=1
+  stty -echo;
+
+  ### | user > host > bash > ...
+  if [ "$colorbg" == "1" ]; then
+    local PROMPT_LEFT=`airline_left $USER ${USER_FG} ${USER_BG} ${USER_END} ${HOST_BG}``airline_left $HOSTNAME ${HOST_FG} ${HOST_BG} ${DIR_BG} ${HOST_END}`
+  else
+      local PROMPT_LEFT="${USER_END}${USER}${termcap_restore}@${HOST_END}${HOSTNAME}${termcap_fg_white}(bash):"
+  fi
+  ### < virtual env |
+  local right_airline_end=${termcap_restore}
+  if [[ -n "$VIRTUAL_ENV" ]]; then
+      local venv_name=`basename ${VIRTUAL_ENV}`
+      if [[ "$colorbg" == "1" ]]; then
+          local VENV_TEXT=`airline_right ${venv_name} ${VENV_END} ${VENV_FG} ${VENV_BG} ${right_airline_end}`
+      else
+          local VENV_TEXT="${VENV_END} (${venv_name})${right_airline_end}"
+      fi
+      right_airline_end=${VENV_END}
+  fi
+  ### ... < git < ...
+  local PROMPT_RIGHT=""
+  if [ "$gitstatus" == "1" ]; then
+    if git repo; then
+      local git_text="`git sst`${GITB} `git head 2> /dev/null` `git sbs`"
+      # colors
+      if git isclean; then
+        if [ "$colorbg" == "1" ]; then
+          local PROMPT_RIGHT=`airline_right "${git_text}" ${GIT_CLEAN_END} ${GIT_CLEAN_FG} ${GIT_CLEAN_BG} ${right_airline_end}`
+        else
+          local PROMPT_RIGHT="${GIT_CLEAN_END} "${git_text}" ${right_airline_end}"
+        fi
+      else
+        if [ "$colorbg" == "1" ]; then
+          local PROMPT_RIGHT=`airline_right "${git_text}" ${GIT_MODIFIED_END} ${GIT_MODIFIED_FG} ${GIT_MODIFIED_BG} ${right_airline_end}`
+        else
+          local PROMPT_RIGHT="${GIT_MODIFIED_END} "${git_text}" ${right_airline_end}"
+        fi
+      fi
+    fi
+  fi
+  [[ -n ${VENV_TEXT} ]] && PROMPT_RIGHT+=${VENV_TEXT}
+  # find the good size to print
+  local size_left=`displayed_char_count "${PROMPT_LEFT}"`
+  local size_right=`displayed_char_count "${PROMPT_RIGHT}"`
+  local space=`expr ${COLUMNS} \- ${size_left} \- ${size_right}`
+
+  ### Airline right
+  printf "%*s" "`expr ${COLUMNS} \- ${size_right}`" && printf "${PROMPT_RIGHT}"
+  ### Airline left
+  printf "\r${PROMPT_LEFT}${DIR_BG}${DIR_FG} `display_path ${space}` ${DIR_END}\n"
+  ### Prompt
+  # ${ret_value} already set in .bash/preexec
+  if [ "$colorbg" == "1" ]; then
+      PS1="${STATUS_BG}${STATUS_FG}${ret_value}${TEXT_BG}${STATUS_END}${SIGN}${TEXT_FG} "
+  else
+      PS1="${STATUS_END}${ret_value}${SIGN}${TEXT_FG} "
+  fi
+
+  # end of precmd
+  stty echo;
+}
+

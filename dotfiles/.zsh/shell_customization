@@ -1,0 +1,19 @@
+#!/bin/zsh
+
+#####################################
+##  Shell customization
+#####################################
+
+# additional bindkeys as in zsh
+bindkey "[1~" beginning-of-line   # Home
+bindkey "^[[4~" end-of-line         # End
+
+#####################################
+#   Prompt
+#####################################
+
+#default option values
+[[ -z "${colorbg+unset}"       ]] &&  xrdb -query                   &> /dev/null && export colorbg=1          # no color bg in console out of X
+[[ -z "${powerline+unset}"     ]] && (xrdb -query | grep Powerline) &> /dev/null && export powerline=1        # check if selected in .Xresources
+[[ -z "${gitstatus+unset}"     ]]                                                && export gitstatus=1        # activate git status by default
+[[ -z "${prompt_notify+unset}" ]]                                                && export prompt_notify='' # use bell as notifier at each prompt

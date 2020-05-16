@@ -1,0 +1,155 @@
+#!/bin/tcsh
+
+#####################################
+# Prompt coloré
+#####################################
+
+source ~/.csh/colors
+
+if ( ${powerline} ) then
+  set SEPI = ""
+  set SEPO = ""
+  set GITB = ""
+  set SIGN = ""
+else
+  set SEPI = ""
+  set SEPO = ""
+  set GITB = ""
+  set SIGN = ' $'
+endif
+
+### Left airline prompt
+set USER_FG             = "${termcap_fg_white}"
+set USER_BG             = "${termcap_bg_usr}"
+set USER_END            = "${termcap_fg_usr}"
+set HOST_FG             = "${termcap_fg_black}"
+set HOST_BG             = "${termcap_bg_green}"
+set HOST_END            = "${termcap_fg_green}"
+# set SHELL_FG            = "${termcap_fg_black}"
+# set SHELL_BG            = "${termcap_bg_yellow}"
+# set SHELL_END           = "${termcap_fg_yellow}"
+set DIR_FG              = "${termcap_fg_yellow}"
+set DIR_BG              = "${termcap_restore}"
+set DIR_END             = "${termcap_restore}"
+
+### Right airline prompt
+set GIT_CLEAN_FG        = "${termcap_fg_black}"
+set GIT_CLEAN_BG        = "${termcap_bg_green}"
+set GIT_CLEAN_END       = "${termcap_fg_green}"
+set GIT_UNTRACKED_FG    = "${termcap_fg_black}"
+set GIT_UNTRACKED_BG    = "${termcap_bg_yellow}"
+set GIT_UNTRACKED_END   = "${termcap_fg_yellow}"
+set GIT_MODIFIED_FG     = "${termcap_fg_black}"
+set GIT_MODIFIED_BG     = "${termcap_bg_orange}"
+set GIT_MODIFIED_END    = "${termcap_fg_orange}"
+set VENV_FG             = "${termcap_fg_black}"
+set VENV_BG             = "${termcap_bg_blue}"
+set VENV_END            = "${termcap_fg_blue}"
+
+### Left prompt
+set STATUS_FG           = "${prompt_fg_white}"
+set STATUS_BG           = "${prompt_bg_orange}"
+set STATUS_END          = "${prompt_fg_orange}"
+set TEXT_BG             = "${prompt_restore}"
+set TEXT_FG             = "${prompt_restore}"
+
+### useful aliases
+alias displayed_char_count 'echo -n "\!:1" | sed "s+\[[0-9;]*[mJ]++g" | wc -m'
+
+alias display_path '\\
+  set p="`dirs`";\\
+  if ( $%p <= \!:1 )\\
+    echo " $p";\\
+  if ( $%p >  \!:1 )\\
+    echo " $p"|tail -c`expr \!:1 \- 4`|sed "s/^/ [..]/";\\
+'
+alias airline_left  '\\
+  if (   ${powerline} )\\
+    echo -n "\!:2\!:3 \!:1 \!:4\!:5$SEPI";\\
+  if ( ! ${powerline} )\\
+    echo -n "\!:2\!:3 \!:1 \!:4\!:5";\\
+'
+alias airline_right '\\
+  if (   ${powerline} )\\
+    echo -n "\!:2$SEPO\!:3\!:4 \!:1 \!:5";\\
+  if ( ! ${powerline} )\\
+    echo -n "\!:2\!:3\!:4 \!:1 \!:5";\\
+'
+alias init_precmd '\\
+  stty -echo;\\
+  set GIT_TEXT = "";\\
+  set GIT_HEAD = "";\\
+  set GIT_CHANGE = "";\\
+  set SPACE = "";\\
+  set PROMPT_LEFT = "";\\
+  set PROMPT_RIGHT = "";\\
+  set VENV_NAME = "";\\
+  set VENV_TEXT = "";\\
+  set right_airline_end = "";\\
+'
+alias end_precmd '\\
+  unset GIT_REPO;\\
+  unset GIT_DIFF;\\
+  unset GIT_CHANGE;\\
+  unset PROMPT_LEFT;\\
+  unset PROMPT_RIGHT;\\
+  unset VENV_NAME;\\
+  unset VENV_TEXT;\\
+  unset right_airline_end;\\
+  stty echo;\\
+'
+
+# display after prompt
+alias postcmd '\\
+    unset prompted;\\
+'
+
+# display before prompt
+alias precmd '\\
+  init_precmd;\\
+  if (   ${colorbg} )\\
+    set PROMPT_LEFT=`airline_left $USER ${USER_FG} ${USER_BG} ${USER_END} ${HOST_BG}``airline_left $HOST ${HOST_FG} ${HOST_BG} ${DIR_BG} ${HOST_END}`;\\
+  if ( ! ${colorbg} )\\
+    set PROMPT_LEFT="${USER_END}${USER}${termcap_fg_white}@${HOST_END}${HOST}${termcap_fg_white}(tcsh):";\\
+  if ( ${?VIRTUAL_ENV} )\\
+    set VENV_NAME=`basename ${VIRTUAL_ENV}`;\\
+  if ( ${?VIRTUAL_ENV} )\\
+    set right_airline_end = ${VENV_END};\\
+  if ( ${gitstatus} && { git repo } )\\
+    set GIT_REPO;\\
+  if ( ${gitstatus} && ${?GIT_REPO} )\\
+    set GIT_HEAD=`bash -c "git head 2> /dev/null"`;\\
+  if ( ${gitstatus} && ${?GIT_REPO} && { ( git diff --quiet HEAD >& /dev/null ) } )\\
+    set GIT_DIFF;\\
+  if ( ${gitstatus} && ${?GIT_REPO} )\\
+    set GIT_CHANGE="`git status --porcelain`";\\
+  if ( ${gitstatus} && ${?GIT_REPO} )\\
+    set GIT_TEXT="`git sst` ${GITB} ${GIT_HEAD} `git sbs`";\\
+  if ( ${gitstatus} && ${?GIT_REPO} &&   ${?GIT_DIFF}  && ! ${%GIT_CHANGE} )\\
+    set PROMPT_RIGHT=`airline_right "${GIT_TEXT}" ${GIT_CLEAN_END} ${GIT_CLEAN_FG} ${GIT_CLEAN_BG} "${right_airline_end}${GIT_CLEAN_BG}"`;\\
+  if ( ${gitstatus} && ${?GIT_REPO} &&   ${?GIT_DIFF}  &&   ${%GIT_CHANGE} )\\
+    set PROMPT_RIGHT=`airline_right "${GIT_TEXT}" ${GIT_UNTRACKED_END} ${GIT_UNTRACKED_FG} ${GIT_UNTRACKED_BG} "${right_airline_end}${GIT_UNTRACKED_BG}"`;\\
+  if ( ${gitstatus} && ${?GIT_REPO} && ! ${?GIT_DIFF} )\\
+    set PROMPT_RIGHT=`airline_right "${GIT_TEXT}" ${GIT_MODIFIED_END} ${GIT_MODIFIED_FG} ${GIT_MODIFIED_BG} "${right_airline_end}${GIT_MODIFIED_BG}"`;\\
+  if ( ${gitstatus} && ${?VIRTUAL_ENV} &&   ${?GIT_REPO} )\\
+    set VENV_TEXT=`airline_right ${VENV_NAME} "" ${VENV_FG} ${VENV_BG} ${termcap_restore}`;\\
+  if ( ${?VIRTUAL_ENV} && ! ${?GIT_REPO} )\\
+    set VENV_TEXT=`airline_right ${VENV_NAME} ${VENV_END} ${VENV_FG} ${VENV_BG} ${termcap_restore}`;\\
+  if ( ${?VIRTUAL_ENV} )\\
+    set PROMPT_RIGHT="${PROMPT_RIGHT}${VENV_TEXT}";\\
+  ;\\
+  set SIZE_LEFT=`displayed_char_count "${PROMPT_LEFT}"`;\\
+  set SIZE_RIGHT=`displayed_char_count "${PROMPT_RIGHT}"`;\\
+  set SPACE=`expr ${COLUMNS} \- ${SIZE_LEFT} \- ${SIZE_RIGHT}`;\\
+  ;\\
+  printf "%*s" `expr ${COLUMNS} \- ${SIZE_RIGHT}` && printf "${PROMPT_RIGHT}";\\
+  printf "\r${PROMPT_LEFT}${DIR_BG}${DIR_FG}`display_path $SPACE`${DIR_END}\n";\\
+  end_precmd;\\
+'
+
+# standard prompt
+if ( ${colorbg} ) then
+  set prompt = "${STATUS_BG}${STATUS_FG}%?${TEXT_BG}${STATUS_END}${SIGN}${TEXT_FG} "
+else
+  set prompt = "${STATUS_END}%?${SIGN}${TEXT_FG} "
+endif

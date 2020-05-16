@@ -1,0 +1,20 @@
+[include]
+	path = ~/.config/git/user
+[merge]
+	tool = vimdiff
+[color]
+	ui = auto
+[alias]
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	ls-subtrees = ! "git log | grep git-subtree-dir | awk '{ print $2 }'"
+	sst = ! git repo && (env LANG=C git status -s | perl -n -e 'END{{printf \"%d|\",$u if $u}{printf \"%d|%d \",$l,$i if $u+$l+$i}}/^fatal/ or ((/^[?]/ and $u++) xor (/^[^ ?]/ and $i++) xor (/^[^?]\\S/ and $l++))')
+	sbs = ! git repo && (env LANG=C git branch -vv | perl -n -e 'if(/^\\*/){if(/\\[.*?\\]/){$t=$& xor $t=~s/ahead /↑/ xor $t=~s/behind /↓/ xor $t=~s/,// xor $t=~s/.*?(↑|↓|$)/$1/ xor $t=~s/]// xor ($t and print \"$t \")}}')
+	repo = ! sh -c 'git rev-parse --git-dir > /dev/null 2>&1'
+	head = ! git repo && git status | head -n 1 |sed -e \"s/.* //\"
+	isclean = ! git repo && sh -c 'git diff HEAD --quiet > /dev/null 2>&1'
+	isuntracked = ! git repo && sh -c 'git status --porcelain > /dev/null 2>&1'
+	root = rev-parse --show-toplevel
+[core]
+	excludesfile = ~/.config/git/ignore
+[push]
+	default = simple

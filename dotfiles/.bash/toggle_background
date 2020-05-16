@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [ "${background}" = light ]; then
+  background="dark"
+elif [ "${background}" = dark ]; then
+  background="light"
+fi
+
+source ~/.bash/shell_customization

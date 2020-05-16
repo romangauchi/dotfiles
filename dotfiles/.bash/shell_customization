@@ -1,0 +1,165 @@
+#!/bin/bash
+#####################################
+##  Shell configuration
+#####################################
+
+# don't put duplicate lines in the history. See bash(1) for more options
+#ignoredups (ignore les commandes répétées)
+#ignorespace (ignore les commandes qui commencent par un espace)
+#ignoreboth (ignore les deux)
+HISTCONTROL=ignoredups
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=5000         # Taille de l'historique de chaque shell
+HISTFILESIZE=100000     # Taille de HISTFILE (~/.bash_history)
+HISTTIMEFORMAT="[%F %R] "
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# If set, the pattern "**" used in a pathname expansion context will
+# match all files and zero or more directories and subdirectories.
+#shopt -s globstar
+
+# keyboard
+bind '" ": "$(/usr/bin/printf \"\\u00A0\")"'
+bind 'set bell-style none'              # never ring the bell
+
+# additional bindkeys as in bash
+bind 'set bind-tty-special-chars off'
+bind '"^P": history-search-backward'    # Ctrl + P
+bind '"^N": history-search-forward'     # Ctrl + N
+bind '"\e[A": history-search-backward'  # Up
+bind '"\e[B": history-search-forward'   # Down
+bind '"[1~": beginning-of-line'       # Home
+bind '"[4~": end-of-line'             # End
+bind '"[1;5D": backward-word'         # Ctrl + Right (enable by default)
+bind '"[1;5C": forward-word'          # Ctrl + Left (enable by default)
+bind '"\C-u": kill-whole-line'          # Ctrl + U (change default behavior)
+bind '"\e/": dabbrev-expand'
+bind '"\e ": history-expand-line'
+bind -x '"\ez": "fg"'
+
+#####################################
+#   Auto-complétion contextuelle
+#####################################
+
+# Perform partial completion on the first <tab> press then start cycling full
+# results on the second <tab> press :)
+bind 'set menu-complete-display-prefix on'
+# Display the list of matches when no further completion is possible
+bind 'set show-all-if-unmodified on'
+# Display all possible matches for an ambiguous pattern
+bind 'set show-all-if-ambiguous on'
+# Simply ignore case
+bind 'set completion-ignore-case on'
+# Add some colors
+bind 'set colored-stats on'
+#bind 'set colored-completion-prefix on' # too much
+# Do not show hidden directories
+bind 'set match-hidden-files off'
+# <tab> | make cycle forward between possible completions
+#bind 'TAB:menu-complete'
+# <S-tab> | make cycle backward between possible completions
+bind '"\e[Z": menu-complete-backward'
+
+# Enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if ! shopt -oq posix; then
+  if [ -f "${HOME}/.bash-completion/etc/profile-d/bash-completion.sh" ]; then
+    . "${HOME}/.bash-completion/etc/profile-d/bash_completion.sh"
+  elif [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+
+# Git autocompletion features
+# (https://github.com/git/git/blob/master/contrib/completion/git-completion.bash)
+[ -f "${HOME}/.bash/git-completion.bash" ] && source ${HOME}/.bash/git-completion.bash
+
+#####################################
+#   Prompt
+#####################################
+
+# default option values
+[[ -z "${colorbg+unset}"       ]] &&  xrdb -query                   &> /dev/null && export colorbg=1          # no color bg in console out of X
+[[ -z "${powerline+unset}"     ]] && (xrdb -query | grep Powerline) &> /dev/null && export powerline=1        # check if selected in .Xresources
+[[ -z "${gitstatus+unset}"     ]]                                                && export gitstatus=1        # activate git status by default
+[[ -z "${prompt_notify+unset}" ]]                                                && export prompt_notify='' # use bell as notifier at each prompt
+
+# Special keys for every terminals
+if [ -n "${STY}" ]; then # we are in a screen session
+  vt_dcs="\033P"                   ; #escape string using DCS (Display Control String)
+  vt_st="\033\\"                   ;
+  vt_fg="\033]10"
+  vt_bg="\033]11"
+  vt_ct="\007"
+  vt_co="\033]4"
+elif [ -n "${TMUX}" ]; then # we are in a screen session
+  vt_dcs="\033Ptmux;"                   ; #escape string using DCS (Display Control String)
+  vt_st="\033\\"                   ;
+  vt_fg="\033\033]10"
+  vt_bg="\033\033]11"
+  vt_ct="\007"
+  vt_co="\033\033]4"
+else
+  vt_dcs=""                        ;
+  vt_st=""                         ;
+  vt_fg="\033]10"
+  vt_bg="\033]11"
+  vt_ct="\007""${VENV_TEXT}"
+  vt_co="\033]4"
+fi
+
+ctlhead="${vt_dcs}"
+ctltail="${vt_ct}${vt_st}"
+
+# default themes
+# /!\ DO NOT CHANGE HERE, USE THOSE VARIABLES IN YOUR ~/.bash/bashrc.perso /!\
+themes_dir="${HOME}/.themes"
+[[ -z "${background}" ]]        && background="dark"
+[[ -z "${dark_theme}" ]]        && dark_theme="roman-dark"
+[[ -z "${light_theme}" ]]       && light_theme="solarized-light"
+[[ "${background}" == "dark" ]] && current_theme="${dark_theme}" || current_theme="${light_theme}"
+
+# Parsing them colors from theme file (*.sh)
+grep -E '^export' ${themes_dir}/${current_theme}.sh | while read -r line ; do
+  # extract color and label name from file
+  label=`echo $line | perl -pe 's/export\s+([^ =]+)=.*/\1/g'`
+  hex_color=`echo $line | perl -pe 's/export.+="#(.{2})(.{2})(.{2})".*/\1\/\2\/\3/g'`
+  ## foreground color
+  if [ "${label}" == "FOREGROUND_COLOR" ]; then echo -ne "${ctlhead}${vt_fg};rgb:${hex_color}${ctltail}"; fi
+  ## background color
+  if [ "${label}" == "BACKGROUND_COLOR" ]; then echo -ne "${ctlhead}${vt_bg};rgb:${hex_color}${ctltail}"; fi
+  ## other colors
+  if [[ "${label}" = COLOR_* ]] ; then
+    number="`echo ${label} | cut -d '_' -f2`"
+    number="`echo ${number} - 1 | bc`"
+    echo -ne "${ctlhead}${vt_co};${number};rgb:${hex_color}${ctltail}";
+  fi
+done
+
+# call toggle background script
+if [ -z "${__F5_toggle_solarized__}" ]; then
+  if echo $BASH_VERSION | perl -ne 'exit ($_ lt "4.3")'; then
+    bind -x '"\e[15~": "source ~/.bash/toggle_background"'
+  else
+    bind '"\e[15~": "\C-usource ~/.bash/toggle_background\C-j\C-y"'
+  fi
+  __F5_toggle_solarized__=1
+fi
+
+source ~/.bash/prompt
+
+# setup precmd & preexec hooks
+if [ -f ~/.bash/preexec ]; then
+    . ~/.bash/preexec
+fi
+

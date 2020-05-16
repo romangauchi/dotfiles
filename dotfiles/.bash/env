@@ -1,0 +1,42 @@
+#!/bin/bash
+
+#####################################
+##  Environment
+#####################################
+
+# export LANG='fr_FR.UTF-8'
+export LANG='en_US.UTF-8'
+export LC_COLLATE='C'
+export LOCALE='UTF-8'
+export LESSCHARSET='UTF-8'
+
+#export MANPAGER='col -b | vim -R -c "set ft=man nomod nolist" -'
+export MANPAGER="less"
+export FCEDIT="vim -f"
+export EDITOR="vim -f"
+export VISUAL="/usr/bin/xterm -e vim -f"
+export NAVIGATOR="firefox"
+export TERMINAL="/usr/bin/xterm"
+export SHELL="/bin/bash"
+
+# make less more friendly for non-text input files, see lesspipe(1)
+# export LESSOPEN, LESSCLOSE
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# enable color support of ls and also add handy aliases
+# export LS_COLORS
+[ -x /usr/bin/dircolors ] && test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+
+# colored GCC warnings and errors
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+
+# disable XON/XOFF on CTRL-Q/CTRL-S
+if [ -n "${TERM+unset}" ] ; then
+  stty start ''
+  stty stop  ''
+  stty -ixon
+  stty -ixoff
+fi
+if [ -n "$TMUX" ] ; then
+  which tmux >&/dev/null && eval $(tmux show-environment -s 2>/dev/null)
+fi

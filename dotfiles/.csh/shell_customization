@@ -1,0 +1,137 @@
+#!/bin/tcsh -f
+#####################################
+##  Shell configuration
+#####################################
+
+set history=( 100000 "%h [%Y-%W-%D %T] %R\n" )
+set savehist=100000
+set time=10
+
+set histlit
+set filec
+set nobeep
+set implicitcd
+set color
+set noding
+set dextract
+set dunique
+
+alias helpcommand '\!* -h'
+
+# keyboard
+bindkey -s " " '`/usr/bin/printf "\\u00A0"`'
+
+# additional bindkeys as in csh
+bindkey "^P" history-search-backward    # Ctrl + P
+bindkey "^N" history-search-forward     # Ctrl + N
+bindkey "\e[A" history-search-backward  # Up (enable by default)
+bindkey "\e[B" history-search-forward   # Down (enable by default)
+bindkey "[1~" beginning-of-line       # Home
+bindkey "[4~" end-of-line             # End
+bindkey "[1;5D" backward-word         # Ctrl + Right
+bindkey "[1;5C" forward-word          # Ctrl + Left
+bindkey "^W" backward-delete-word       # Ctrl + W
+bindkey "^R" i-search-back              # Ctrl + R
+bindkey "."   insert-last-word
+bindkey -c "z" "fg"
+
+#####################################
+##  Auto-complétion contextuelle
+#####################################
+
+set autolist=ambiguous
+set autocorrect
+set autoexpand
+set complete=enhance
+set correct=cmd
+#RG: do no use!!: set symlinks=chase
+
+## <tab> | make cycle forward between possible completions
+#bindkey "\t" complete-word-fwd
+## <S-tab> | make cycle backward between possible completions
+#bindkey "\e[Z" complete-word-back
+
+# CSH autocompletion features
+[ -f "${HOME}/.csh/completion" ] && source ${HOME}/.csh/completion
+
+# Git autocompletion features (already source in 'completion')
+# (https://github.com/git/git/blob/master/contrib/completion/git-completion.tcsh)
+#[ -f "${HOME}/.csh/git-completion.tcsh" ] && source ${HOME}/.csh/git-completion.tcsh
+
+#####################################
+##  Prompt
+#####################################
+
+# default option values
+if ( ! ${?colorbg}       ) then
+    (xrdb -query)                      >& /dev/null && setenv colorbg 1   || setenv colorbg 0          # no color bg in console out of X
+endif
+if ( ! ${?powerline}     ) then
+    (xrdb -query | grep -q Powerline ) >& /dev/null && setenv powerline 1 || setenv powerline 0        # check if selected in .Xresources
+endif
+if ( ! ${?gitstatus}     )                                                   setenv gitstatus 1        # activate git status by default
+if ( ! ${?prompt_notify} )                                                   setenv prompt_notify '' # use bell as notifier at each prompt
+
+# disable automatic virtual environment print on prompt
+setenv VIRTUAL_ENV_DISABLE_PROMPT 1
+
+# Special keys for every terminals
+if (${?STY}) then # we are in a screen session
+  set vt_dcs = "\033P"                     ; #escape string using DCS (Display Control String)
+  set vt_st = "\033\\"                     ;
+  set vt_fg = "\033]10"
+  set vt_bg = "\033]11"
+  set vt_ct = "\007"
+  set vt_co = "\033]4"
+else if (${?TMUX}) then # we are in a tmux session
+  set vt_dcs = "\033Ptmux;"                ; #escape string using DCS (Display Control String)
+  set vt_st = "\033\\"                     ;
+  set vt_fg = "\033\033]10"
+  set vt_bg = "\033\033]11"
+  set vt_ct = "\007"
+  set vt_co = "\033\033]4"
+else
+  set vt_dcs = ""                        ;
+  set vt_st = ""                         ;
+  set vt_fg = "\033]10"
+  set vt_bg = "\033]11"
+  set vt_ct = "\007"
+  set vt_co = "\033]4"
+endif
+
+set ctlhead = "${vt_dcs}"
+set ctltail = "${vt_ct}${vt_st}"
+
+# default themes
+# /!\ DO NOT CHANGE HERE, USE THOSE VARIABLES IN YOUR ~/.csh/cshrc.perso /!\
+set themes_dir="${HOME}/.themes"
+if ( ! ${?background} )  set background  = "dark"
+if ( ! ${?dark_theme} )  set dark_theme  = "roman-dark"
+if ( ! ${?light_theme} ) set light_theme = "solarized-light"
+if ( ${background} == "dark" ) then
+    set current_theme = "${dark_theme}"
+else
+    set current_theme = "${light_theme}"
+endif
+
+# Parsing them colors from theme file (*.sh)
+foreach line ("`grep -E ^export ${themes_dir}/${current_theme}.sh`")
+  # extract color and label name from file
+  set label          = `echo $line | perl -pe 's/export\s+([^ =]+)=.*/\1/g'`
+  set hex_color      = `echo $line | perl -pe 's/export.+="#(.{2})(.{2})(.{2})".*/\1\/\2\/\3/g'`
+  ## foreground color
+  if ( ${label} == "FOREGROUND_COLOR" ) printf "${ctlhead}${vt_fg};rgb:${hex_color}${ctltail}"
+  ## background color
+  if ( ${label} == "BACKGROUND_COLOR" ) printf "${ctlhead}${vt_bg};rgb:${hex_color}${ctltail}"
+  ## other colors
+  if ( "${label}" =~ "COLOR_*" ) then
+    set number = `echo ${label} | cut -d '_' -f2`
+    set number = `echo ${number} - 1 | bc`
+    printf "${ctlhead}${vt_co};${number};rgb:${hex_color}${ctltail}"
+  endif
+end
+
+# <F5> to toggle :D
+bindkey -c "[15~" "source ~/.csh/toggle_background"
+
+source ~/.csh/prompt

@@ -1,0 +1,13 @@
+#!/bin/tcsh
+
+if ( ! ${?background} ) then
+  set background = "light"
+endif
+
+if (${background} == light) then
+  set background = "dark"
+else if (${background} == dark) then
+  set background = "light"
+endif
+
+source ~/.csh/shell_customization

@@ -1,0 +1,98 @@
+#!/bin/bash
+#####################################
+# Prompt coloré
+# set color_name = '\[\033[ color_code m\]'
+#####################################
+
+prompt_fg_black='\[\033[30m\]'
+prompt_fg_red='\[\033[31m\]'
+prompt_fg_green='\[\033[32m\]'
+prompt_fg_yellow='\[\033[33m\]'
+prompt_fg_blue='\[\033[34m\]'
+prompt_fg_magenta='\[\033[35m\]'
+prompt_fg_cyan='\[\033[36m\]'
+prompt_fg_white='\[\033[37m\]'
+prompt_fg_brblack='\[\033[90m\]'
+prompt_fg_brred='\[\033[91m\]'
+prompt_fg_brgreen='\[\033[92m\]'
+prompt_fg_bryellow='\[\033[93m\]'
+prompt_fg_brblue='\[\033[94m\]'
+prompt_fg_brmagenta='\[\033[95m\]'
+prompt_fg_brcyan='\[\033[96m\]'
+prompt_fg_brwhite='\[\033[97m\]'
+prompt_bg_black='\[\033[40m\]'
+prompt_bg_red='\[\033[41m\]'
+prompt_bg_green='\[\033[42m\]'
+prompt_bg_yellow='\[\033[43m\]'
+prompt_bg_blue='\[\033[44m\]'
+prompt_bg_magenta='\[\033[45m\]'
+prompt_bg_cyan='\[\033[46m\]'
+prompt_bg_white='\[\033[47m\]'
+prompt_bg_brblack='\[\033[100m\]'
+prompt_bg_brred='\[\033[101m\]'
+prompt_bg_brgreen='\[\033[102m\]'
+prompt_bg_bryellow='\[\033[103m\]'
+prompt_bg_brblue='\[\033[104m\]'
+prompt_bg_brmagenta='\[\033[105m\]'
+prompt_bg_brcyan='\[\033[106m\]'
+prompt_bg_brwhite='\[\033[107m\]'
+prompt_restore='\[\033[0;0m\]'
+prompt_bg_fillline='\[\033[J\]'
+# customized colors
+prompt_fg_orange="${prompt_fg_brred}"
+prompt_fg_violet="${prompt_fg_brmagenta}"
+prompt_bg_orange="${prompt_bg_brred}"
+prompt_bg_violet="${prompt_bg_brmagenta}"
+
+termcap_fg_black='[30m'
+termcap_fg_red='[31m'
+termcap_fg_green='[32m'
+termcap_fg_yellow='[33m'
+termcap_fg_blue='[34m'
+termcap_fg_magenta='[35m'
+termcap_fg_cyan='[36m'
+termcap_fg_white='[37m'
+termcap_fg_brblack='[90m'
+termcap_fg_brred='[91m'
+termcap_fg_brgreen='[92m'
+termcap_fg_bryellow='[93m'
+termcap_fg_brblue='[94m'
+termcap_fg_brmagenta='[95m'
+termcap_fg_brcyan='[96m'
+termcap_fg_brwhite='[97m'
+termcap_bg_black='[40m'
+termcap_bg_red='[41m'
+termcap_bg_green='[42m'
+termcap_bg_yellow='[43m'
+termcap_bg_blue='[44m'
+termcap_bg_magenta='[45m'
+termcap_bg_cyan='[46m'
+termcap_bg_white='[47m'
+termcap_bg_brblack='[100m'
+termcap_bg_brred='[101m'
+termcap_bg_brgreen='[102m'
+termcap_bg_bryellow='[103m'
+termcap_bg_brblue='[104m'
+termcap_bg_brmagenta='[105m'
+termcap_bg_brcyan='[106m'
+termcap_bg_brwhite='[107m'
+termcap_restore='[0;0m'
+termcap_bg_fillline='[J'
+# customized colors
+termcap_fg_orange="${termcap_fg_brred}"
+termcap_fg_violet="${termcap_fg_brmagenta}"
+termcap_bg_orange="${termcap_bg_brred}"
+termcap_bg_violet="${termcap_bg_brmagenta}"
+
+if [ -n "$root" ]; then
+  prompt_fg_usr="${prompt_fg_red}"
+  prompt_bg_usr="${prompt_bg_red}"
+  termcap_fg_usr="${termcap_fg_red}"
+  termcap_bg_usr="${termcap_bg_red}"
+else
+  prompt_fg_usr="${prompt_fg_cyan}"
+  prompt_bg_usr="${prompt_bg_cyan}"
+  termcap_fg_usr="${termcap_fg_cyan}"
+  termcap_bg_usr="${termcap_bg_cyan}"
+fi
+

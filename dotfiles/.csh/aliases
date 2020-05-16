@@ -1,0 +1,135 @@
+#!/bin/tcsh
+
+# Colors
+alias    ls  'ls    --color=auto --time-style=long-iso --group-directories-first'
+alias  grep  'grep  --color=auto'
+alias fgrep  'fgrep --color=auto'
+alias egrep  'egrep --color=auto'
+alias zgrep  'zgrep --color=auto'
+alias  less  'less -FRX'
+if ( -x "`sh -c 'which colordiff 2>/dev/null'`" ) alias  diff 'colordiff'
+
+# Builtins
+alias rm     'rm -i'    # i: prompt before every removal
+alias cp     'cp -ip'   # i: prompt before overwrite, p: preserve timestamps (date)
+alias mv     'mv -i'    # i: prompt before overwrite
+alias mkdir  'mkdir -p' # p: make parent directories as needed
+
+alias ..     'cd ..'
+alias ...    'cd ../..'
+alias ....   'cd ../../..'
+alias .....  'cd ../../../..'
+alias ...... 'cd ../../../../..'
+alias cd.    'cd ..'
+alias cd..   'cd ..'
+alias f	     'finger -s'
+alias h      'history'
+alias j      'ps'
+alias l      'ls'
+alias ll     'ls -lh'
+alias la     'ls -lha'
+alias lt     'ls -lhtr'
+alias llog   'journalctl -xn'
+alias tt     'tree -ACF'
+alias ttd    'tt -d'
+alias path   'echo $PATH'
+
+alias duh    'du -h --max-depth=1 --exclude="*/.snapshot/*" | sort -h'
+alias duhd   'du -shc ./* | sort -h'
+alias duha   'du -sh .[^.]* | sort -h'
+
+# Git
+alias ga     'git add'
+alias gam    'git add -u'
+alias gaa    'git add -A'
+alias gb     'git branch'
+alias gc     'git checkout'
+alias gd     'git diff'
+alias gl     'git lg'
+alias gcm    'git commit -m'
+alias gp     'git push'
+alias gpom   'git push origin master'
+alias gpo    'git branch | grep "^\*" | cut -d" " -f2 | xargs git push origin'
+alias gpl    'git pull'
+alias gplom  'git pull origin master'
+alias gplo   'git branch | grep "^\*" | cut -d" " -f2 | xargs git pull origin'
+alias gst    'git status'
+alias gsb    'git status -b'
+alias gsl    'git stash list'
+alias gr     'git repo && cd `git root` || git root'
+
+# Tmux
+alias tl     'tmux list-session'
+alias tn     'tmux new-session'
+alias tw     'tmux new-window'
+alias ts     'tmux split-window'
+alias tvim   'tmux split-window vim'
+
+# Custom
+alias po     'poweroff'
+alias a      'cat ~/.csh/aliases'
+alias aa     'vim ~/.csh/cshrc.perso'
+alias aaa    'source ~/.cshrc'
+alias vv     'vim ~/.vimrc'
+alias ae     'source bin/activate.csh'
+alias de     'deactivate'
+
+# Web search from terminal
+alias google  'nohup xdg-open "https://www.google.com/search?q="` perl -e '"'"'print(join("+",@ARGV))'"'"' \!:* ` >& /dev/null'
+alias ddg     'nohup xdg-open "https://www.duckduckgo.com/?q="` perl -e '"'"'print(join("+",@ARGV))'"'"' \!:* ` >& /dev/null'
+alias github  'nohup xdg-open "https://www.github.com/search?q="` perl -e '"'"'print(join("+",@ARGV))'"'"' \!:* ` >& /dev/null'
+alias wiki    'nohup xdg-open "https://www.duckduckgo.com/?q=\\!w+"` perl -e '"'"'print(join("+",@ARGV))'"'"' \!:* ` >& /dev/null'
+alias news    'nohup xdg-open "https://www.duckduckgo.com/?q=\\!n+"` perl -e '"'"'print(join("+",@ARGV))'"'"' \!:* ` >& /dev/null'
+alias youtube 'nohup xdg-open "https://www.duckduckgo.com/?q=\\!yt+"` perl -e '"'"'print(join("+",@ARGV))'"'"' \!:* ` >& /dev/null'
+alias map     'nohup xdg-open "https://www.duckduckgo.com/?q=\\!m+"` perl -e '"'"'print(join("+",@ARGV))'"'"' \!:* ` >& /dev/null'
+alias image   'nohup xdg-open "https://www.duckduckgo.com/?q=\\!i+"` perl -e '"'"'print(join("+",@ARGV))'"'"' \!:* ` >& /dev/null'
+
+# Others stuffs
+alias whatip  'curl -s http://whatismyip.akamai.com; echo'
+alias weather 'curl fr.wttr.in/grenoble'
+
+# LaTeX
+alias lpdf      'pdflatex -shell-escape'
+alias pdfmerge  'ghostscript -dNOPAUSE -sDEVICE=pdfwrite -dBATCH -sOUTPUTFILE=\!:1 \!:2*'
+
+# Vim
+alias cleanvim 'find \!:* -name ".*.sw*" -delete'
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert 'echo -n ""'
+
+# vtar
+alias vtarc 'tar cvzf - \!* | env -u LC_ALL LANG=C gvim --servername vtar -bf -u NONE -c '\''set binary noeol | normal GA.'\'' -c '\''normal gg0vG$h'\"'+y'\'' -c '\''stop'\'' -'
+alias vtarx 'env -u LC_ALL LANG=C gvim -bf -u NONE -c '\''set binary noeol | normal '\"'+pG$dl'\'' -c '\''% ! tar xvzf -'\'' -c '\''set eol | write >>/dev/stdout | quit! '\'';gvim --servername vtar --remote-send '\'':qa! <CR>'\'''
+
+# find
+alias find_gt  'find \!:1 -size +\!:2 \!:3* -exec ls -lh {} \; | awk '"'"'{ print $9 " : " $5 }'"'"''
+alias find_lt  'find \!:1 -size -\!:2 \!:3* -exec ls -lh {} \; | awk '"'"'{ print $9 " : " $5 }'"'"''
+
+# screen
+alias screenls      'screen -ls'
+alias screenkill    'screen -X -S \!:1 quit'
+alias screenkillall 'screen -ls | grep "(" | awk '"'"'{print $1}'"'"' | xargs -I"{}" screen -X -S "{}" quit'
+alias svim          'screen -X split ; screen -X focus ; screen -t "vim" sh -c "vim \!* ; screen -X focus ; screen -X only"'
+
+# dictionnaire
+alias dict           'curl -s dict://dict.org/d:{\!:1}:\!:2* | perl -ne "s/\r//; print if /^151 /../^\./ and not (/^151 / or /^\./)"'
+alias dict-wordnet   'dict \!:1 wn'
+alias dict-thesaurus 'dict \!:1 moby-thesaurus'
+alias dict-fr-en     'dict \!:1 fd-fra-eng'
+alias dict-en-fr     'dict \!:1 fd-eng-fra'
+alias tlfi           'lynx -dump http://www.cnrtl.fr/definition/\!:1 | awk '"'"'/\]options d.affichage/,/XHTML/ {print}'"'"' | perl -ne '"'"'print unless 1../^$/ or eof'"'"
+
+# title
+alias title         "echo -n ']0;\!:*' ; if ($?TMUX) tmux renamew '\!:*' ; if ($?TMUX)tmux setw automatic-rename off"
+alias notitle       "echo -n ']0;'     ; if ($?TMUX) tmux setw automatic-rename on"
+
+# Perl
+alias whereisperlmodule 'which perldoc >& /dev/null && perldoc -lm \!:* || perl -e '"'"'foreach (@ARGV) { s/::/\//g,s/$/.pm/ ; if ( require $_ ) { print $INC{$_} . "\n" }}'"'"' \!:*'
+
+# Cleanup env vars
+alias prepend  '                                   setenv \!:1 ` perl -e '"'"'@items=split(":",$ENV{shift @ARGV});for $arg (reverse @ARGV){@items=grep{$_ ne $arg} @items; unshift @items,$arg};print(join(":",@items))'"'"' \!:* ` '
+alias append   '                                   setenv \!:1 ` perl -e '"'"'@items=split(":",$ENV{shift @ARGV});for $arg (        @ARGV){@items=grep{$_ ne $arg} @items; push    @items,$arg};print(join(":",@items))'"'"' \!:* ` '
+alias remove   '[ `eval echo "\${?\!:1}"` = 1 ] && setenv \!:1 ` perl -e '"'"'@items=split(":",$ENV{shift @ARGV});for $arg (reverse @ARGV){@items=grep{$_ ne $arg} @items;                    };print(join(":",@items))'"'"' \!:* ` '
+alias uniquify '[ `eval echo "\${?\!:1}"` = 1 ] && setenv \!:1 ` perl -e '"'"'   for(split(":",$ENV{shift @ARGV})){unless(defined$list{$_}){$list{$_}=1;                   push    @items,$_ }};print(join(":",@items))'"'"' \!:* ` '

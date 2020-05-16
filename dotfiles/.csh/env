@@ -1,0 +1,46 @@
+#!/bin/csh -f
+
+#####################################
+##  Environment
+#####################################
+
+# setenv LANG 'fr_FR.UTF-8'
+setenv LANG 'en_US.UTF-8'
+setenv LC_COLLATE C
+setenv LOCALE 'UTF-8'
+setenv LESSCHARSET 'UTF-8'
+
+#setenv MANPAGER 'col -b | vim -R -c "set ft=man nomod nolist" -'
+setenv MANPAGER 'less'
+setenv FCEDIT "vim -f"
+setenv EDITOR "vim -f"
+setenv VISUAL "/usr/bin/xterm -e vim -f"
+setenv NAVIGATOR "xdg-open"
+setenv TERMINAL "/usr/bin/xterm"
+setenv SHELL "/bin/tcsh"
+
+setenv TERMCAP "li#:lo#"
+setenv COLUMNS
+setenv LINES
+
+# make less more friendly for non-text input files, see lesspipe(1)
+# setenv LESSOPEN, LESSCLOSE
+[ -x /usr/bin/lesspipe ] && eval `env SHELL=/bin/csh lesspipe`
+
+# enable color support of ls and also add handy aliases
+# setenv LS_COLORS
+[ -x /usr/bin/dircolors ] && test -r ~/.dircolors && eval `dircolors -c ~/.dircolors` || eval `dircolors -c`
+
+# colored GCC warnings and errors
+setenv GCC_COLORS 'error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+
+# disable XON/XOFF on CTRL-Q/CTRL-S
+if ( ${?TERM} ) then
+  stty start ''
+  stty stop  ''
+  stty -ixon
+  stty -ixoff
+endif
+if ( ${?TMUX} ) then
+    which tmux >&/dev/null && eval `tmux show-environment -s |& perl -pe 'next if /^tmux:/;s/^(\w+)=/setenv $1 /;s/^unset /unsetenv /;s/; export \w+//'`
+endif
