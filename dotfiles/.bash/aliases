@@ -32,15 +32,13 @@ alias     lt='ls -lhtr'
 alias   llog='journalctl -xn'
 alias     tt='tree -ACF'
 alias    ttd='tt -d'
+alias    tta='tt -a'
 alias   path='echo $PATH'
+alias   dirs='dirs -v'
 
 alias    duh='du -shc ~/* | sort -n'
 alias    dul='du -shc ./* | sort -n'
 alias   dula='du -sh .[^.]* | sort -h'
-
-alias   dirs='dirs -v'
-alias     pu='pushd'
-alias     po='popd'
 
 # Git
 alias     ga='git add'
