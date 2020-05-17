@@ -12,6 +12,7 @@ BASEDIR="$(dirname $0)" # directory of this script
 PROG="$(basename $0)"   # name of the script
 DESTDIR="${HOME}"       # home destination directory
 ENVNAME="dotfiles"      # environment (dir) to deploy
+ARCHIVENAME="dotfiles_$(hostname)_$(date +%Y%m%d%H%M%S)" # archive name
 
 # Add some color to your install
 RED="\033[1;31m"
@@ -36,11 +37,14 @@ function usage
   echo
   echo "Operations:"
   echo "  -S, --sync            synchronize dotfiles to the HOME directory"
+  echo "  -A, --archive         save your current dotfiles in an archive"
   echo "  -U, --upload          upload dotfiles from the HOME directory"
   echo
   echo "Options:"
   echo "      --home[=]<dir>    give another home destination directory"
   echo "                        (default: $DESTDIR)"
+  echo "      --output[=]<file> give another archive name to save your dotfiles"
+  echo "                        (default: $ARCHIVENAME)"
   echo "  -n, --dry-run         display status of new/updated/conflicting files"
   echo "  -f, --force           overwrites files without asking"
   echo "  -h, --help            display this help and exit"
@@ -51,19 +55,25 @@ function usage
 function process_opts
 {
   local OPTNAME OPTIND OPTERR OPTARG # arguments
-  local optspec="SUnfh-:"
+  local optspec="SAUnfh-:"
   while getopts ${optspec} OPTNAME; do
 	case "$OPTNAME" in
       -)
         case "$OPTARG" in
           sync)
             SYNC=1;;
+          archive)
+            ARCHIVE=1;;
           upload)
             UPLOAD=1;;
           home)
             DESTDIR="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ));;
           home=*)
             DESTDIR="${OPTARG#*=}";;
+          output)
+            ARCHIVENAME="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ));;
+          output=*)
+            ARCHIVENAME="${OPTARG#*=}";;
           dry-run)
             DRYRUN=1;;
           force)
@@ -79,6 +89,8 @@ function process_opts
         esac;;
       S)
         SYNC=1;;
+      A)
+        ARCHIVE=1;;
       U)
         UPLOAD=1;;
       n)
@@ -96,11 +108,11 @@ function process_opts
     esac
   done
   if [ $# -ge $OPTIND ]; then
-    echo "$PROG: unexpected command line argument: $OPTIND}"
+    echo "$PROG: unexpected command line argument: $@}"
     exit 1
   fi
   # specific errors for this script
-  if [ -z $SYNC ] && [ -z $UPLOAD ]; then
+  if [ -z $SYNC ] && [ -z $UPLOAD ] && [ -z $ARCHIVE ]; then
     echo -e "${RED}error:${ENDC} no operation specified (use -h for help)"
     exit 1
   fi
@@ -211,6 +223,26 @@ function sync_dotfiles
   echo " ($dir) $raw"
 }
 
+## Archive current dotfiles function
+function archive_dotfiles
+{
+  rm -rf /tmp/${ARCHIVENAME}
+  mkdir -p /tmp/${ARCHIVENAME}
+  # list all file names existing in the git and the home directory
+  for f in $(git ls-files | perl -pe 's|^\w+/||' | sort | uniq); do
+    if [ -f ${DESTDIR}/$f ]; then
+      echo "Saving ${DESTDIR}/$f"
+      mkdir -p /tmp/${ARCHIVENAME}/$(dirname $f)
+      cp -a ${DESTDIR}/$f /tmp/${ARCHIVENAME}/$(dirname $f)
+    fi
+  done
+  # compress into a tar.gz
+  cd /tmp
+  tar -czf ${ARCHIVENAME}.tar.gz ${ARCHIVENAME}
+  cd - > /dev/null
+  cp /tmp/${ARCHIVENAME}.tar.gz .
+}
+
 ## Main function
 function main
 {
@@ -227,6 +259,9 @@ function main
 }
 
 process_opts $@
+if [ ! -z $ARCHIVE ]; then
+  archive_dotfiles
+fi
 main
 
 # vim: set shiftwidth=2:
