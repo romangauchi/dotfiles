@@ -9,11 +9,14 @@ Usage: dotfiles-manager.sh <operations> [options]
 
 Operations:
   -S, --sync            synchronize dotfiles to the HOME directory
+  -A, --archive         save your current dotfiles in an archive
   -U, --upload          upload dotfiles from the HOME directory
 
 Options:
       --home[=]<dir>    give another home destination directory
                         (default: <your-home-dir>)
+      --output[=]<file> give another archive name to save your dotfiles
+                        (default: <dotfiles-hostname-date>)
   -n, --dry-run         display status of new/updated/conflicting files
   -f, --force           overwrites files without asking
   -h, --help            display this help and exit
