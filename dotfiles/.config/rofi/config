@@ -1,0 +1,23 @@
+# vim: ft=conf:
+
+# Colors
+rofi.color-enabled: true
+rofi.color-window: argb:e8222D32,argb:00292f37,#EBCB8B
+rofi.color-normal: argb:02000000,#D8DEE9,argb:02000000,argb:02000000,#EBCB8B
+rofi.color-active: argb:02000000,#D8DEE9,argb:02000000,argb:02000000,#D8DEE9
+rofi.color-urgent: argb:02000000,#D8DEE9,argb:02000000,argb:02000000,#D8DEE9
+
+# Fonts
+rofi.font: System San Francisco Display 14
+rofi.eh: 1
+rofi.hide-scrollbar: true
+# Geometry
+rofi.separator-style: solid
+rofi.line-margin: 10
+rofi.lines: 10
+rofi.width: 50
+rofi.padding: 20
+rofi.bw: 3
+rofi.show-icons: true
+# rofi.fullscreen: true
+
