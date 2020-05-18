@@ -1,5 +1,7 @@
 # Dotfiles
 
+![Screenshot of my Tmux configuration](https://raw.githubusercontent.com/wiki/romangauchi/dotfiles/screenshots/dotfiles-01.png)
+
 ## Installation
 
 Clone the dotfiles repertory wherever you want and use the `dotfiles-manager.sh` script to synchronize (install) the files to your personal home directory.
