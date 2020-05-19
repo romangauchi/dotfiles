@@ -27,27 +27,30 @@ ENDC="\033[0m"
 ## Usage function to print some help
 function usage
 {
-  echo "Usage: $PROG <operations> [options]" 1>&2
-  echo
-  echo "Description:"
-  echo "  $PROG deploys and manages the environment files of the"
-  echo "  current HOME directory or a given destination directory."
-  echo "  Common environment files are targeted by default and can be overriden"
-  echo "  by the arguments."
-  echo
-  echo "Operations:"
-  echo "  -S, --sync            synchronize dotfiles to the HOME directory"
-  echo "  -A, --archive         save your current dotfiles in an archive"
-  echo "  -U, --upload          upload dotfiles from the HOME directory"
-  echo
-  echo "Options:"
-  echo "      --home[=]<dir>    give another home destination directory"
-  echo "                        (default: $DESTDIR)"
-  echo "      --output[=]<file> give another archive name to save your dotfiles"
-  echo "                        (default: $ARCHIVENAME)"
-  echo "  -n, --dry-run         display status of new/updated/conflicting files"
-  echo "  -f, --force           overwrites files without asking"
-  echo "  -h, --help            display this help and exit"
+  cat << EOF
+Usage: $PROG <operations> [options]
+
+Description:
+  $PROG deploys and manages the environment files of the
+  current HOME directory or a given destination directory.
+  Common environment files are targeted by default and can be overriden
+  by the arguments.
+
+Operations:
+  -S, --sync            synchronize dotfiles to the HOME directory
+  -I, --install         install extra dependencies (fonts)
+  -A, --archive         save your current dotfiles in an archive
+  -U, --upload          upload dotfiles from the HOME directory
+
+Options:
+      --home[=]<dir>    give another home destination directory
+                        (default: $DESTDIR)
+      --output[=]<file> give another archive name to save your dotfiles
+                        (default: $ARCHIVENAME)
+  -n, --dry-run         display status of new/updated/conflicting files
+  -f, --force           overwrites files without asking
+  -h, --help            display this help and exit
+EOF
 }
 
 ## Parsing arguments function (https://stackoverflow.com/a/7680682)
@@ -55,56 +58,36 @@ function usage
 function process_opts
 {
   local OPTNAME OPTIND OPTERR OPTARG # arguments
-  local optspec="SAUnfh-:"
+  local optspec="SIAUnfh-:"
   while getopts ${optspec} OPTNAME; do
 	case "$OPTNAME" in
+      S) SYNC=1;;
+      I) INSTALL=1;;
+      A) ARCHIVE=1;;
+      U) UPLOAD=1;;
+      n) DRYRUN=1;;
+      f) FORCE=1;;
+      h) usage; exit 0;;
       -)
         case "$OPTARG" in
-          sync)
-            SYNC=1;;
-          archive)
-            ARCHIVE=1;;
-          upload)
-            UPLOAD=1;;
-          home)
-            DESTDIR="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ));;
-          home=*)
-            DESTDIR="${OPTARG#*=}";;
-          output)
-            ARCHIVENAME="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ));;
-          output=*)
-            ARCHIVENAME="${OPTARG#*=}";;
-          dry-run)
-            DRYRUN=1;;
-          force)
-            FORCE=1;;
-          help)
-            usage
-            exit 0;;
+          sync) SYNC=1;;
+          install) INSTALL=1;;
+          archive) ARCHIVE=1;;
+          upload) UPLOAD=1;;
+          home) DESTDIR="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ));;
+          home=*) DESTDIR="${OPTARG#*=}";;
+          output) ARCHIVENAME="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ));;
+          output=*) ARCHIVENAME="${OPTARG#*=}";;
+          dry-run) DRYRUN=1;;
+          force) FORCE=1;;
+          help) usage; exit 0;;
           *)
-            if [ "$OPTERR" != 1 ] && [ "${optspec:0:1}" != ":" ]; then
-              echo "$PROG: unrecognized option '--$OPTARG'" >&2
-              exit 1
-            fi;;
+            echo "$PROG: unknown option '--$OPTARG'" >&2
+            exit 1;;
         esac;;
-      S)
-        SYNC=1;;
-      A)
-        ARCHIVE=1;;
-      U)
-        UPLOAD=1;;
-      n)
-        DRYRUN=1;;
-      f)
-        FORCE=1;;
-      h)
-        usage
-        exit 0;;
       *)
-        # if [ "$OPTERR" != 1 ] || [ "${optspec:0:1}" != ":" ]; then
-          # echo "$PROG: invalid option '-$OPTARG'" >&2
-        # fi;;
-        exit 1
+        echo "$PROG: unknown option '-${OPTARG}'" >&2
+        exit 1;;
     esac
   done
   if [ $# -ge $OPTIND ]; then
@@ -112,7 +95,7 @@ function process_opts
     exit 1
   fi
   # specific errors for this script
-  if [ -z $SYNC ] && [ -z $UPLOAD ] && [ -z $ARCHIVE ]; then
+  if [[ -z $SYNC && -z $INSTALL && -z $UPLOAD && -z $ARCHIVE ]]; then
     echo -e "${RED}error:${ENDC} no operation specified (use -h for help)"
     exit 1
   fi
@@ -138,89 +121,53 @@ function process_opts
   fi
 }
 
-## Upload dotfiles function
-function upload_dotfiles
-{
-  if [[ ! -f $dest ]]; then
-    echo -en "${CYAN}            Missing File${ENDC}"
-  else
-    if diff -q $src $dest 2>&1 > /dev/null; then
-      echo -en "${GREEN}              Up-to-date${ENDC}"
-    else
-      if [[ $(stat -c%Y $dest) -gt $(stat -c%Y $src) ]]; then
-        changes="Older"
-      else
-        changes="Newer"
-      fi
-      if [[ -z $FORCE ]]; then
-        echo -en "${YELLOW}     $changes Changes Exist${ENDC}"
-        if [[ -z $DRYRUN ]]; then
-          echo " ($dir) $raw"
-          echo -en "${BLUE}==> Overwrite, Edit (show diffs) or Ignore? [o/e/i] ${ENDC}"
-          read answer
-          if [[ $answer == "o" ]] || [[ $answer == "O" ]]; then
-            cp -a $dest $src
-            echo -en "${RED}             Overwritten${ENDC}"
-          elif [[ $answer == "e" ]] || [[ $answer == "E" ]]; then
-            vim $src -c "vert diffsplit $dest"
-            if diff -q $src $dest 2>&1 > /dev/null; then
-                echo -en "${GREEN}                 Updated${ENDC}"
-            else
-                echo -en "${YELLOW}               Unchanged${ENDC}"
-            fi
-          else
-            echo -en "                 ${YELLOW}Skipped${ENDC}"
-          fi
-        fi
-      else
-        cp -a $dest $src
-        echo -en "$changes (-f) > ${RED}Overwritten${ENDC}"
-      fi
-    fi
-  fi
-  echo " ($dir) $raw"
-}
 
 ## Synchronize dotfiles function
 function sync_dotfiles
 {
-  if [[ ! -f $dest ]]; then
-    if [[ -z $DRYRUN ]]; then
-      mkdir -p $(dirname $dest)
-      cp -a $src $dest
-      echo -en "${CYAN}                 Created${ENDC}"
-    else
-      echo -en "${CYAN}                New File${ENDC}"
-    fi
-  else
-    if diff -q $src $dest 2>&1 > /dev/null; then
-      echo -en "${GREEN}              Up-to-date${ENDC}"
-    else
-      if [[ $(stat -c%Y $src) -gt $(stat -c%Y $dest) ]]; then
-        changes="Older"
-      else
-        changes="Newer"
-      fi
-      if [[ -z $FORCE ]]; then
-        echo -en "${YELLOW}     $changes Changes Exist${ENDC}"
-        if [[ -z $DRYRUN ]]; then
-          echo " ($dir) $raw"
-          echo -en "${BLUE}==> Owerwrite file? [y/n] ${ENDC}"
-          read answer
-          if [[ $answer == "y" || $answer == "Y" ]]; then
-            cp -a $src $dest
-            echo -en "             ${RED}Overwritten${ENDC}"
-          else
-            echo -en "                 ${YELLOW}Skipped${ENDC}"
-          fi
-        fi
-      else
+  # list all versioned files in the common dir
+  for src in $(git ls-files $BASEDIR/$ENVNAME $(echo "$@" | grep "." | perl -pe "s|^|$BASEDIR/|")); do
+    raw=$(echo $src | perl -pe 's|^\w+/||')
+    dir=$(echo $src | perl -pe 's|^(\w+)/.*|$1|')
+    dest="$DESTDIR/$raw"
+    if [[ ! -f $dest ]]; then
+      if [[ -z $DRYRUN ]]; then
+        mkdir -p $(dirname $dest)
         cp -a $src $dest
-        echo -en "$changes (-f) > ${RED}Overwritten${ENDC}"
+        echo -en "${CYAN}                 Created${ENDC}"
+      else
+        echo -en "${CYAN}                New File${ENDC}"
+      fi
+    else
+      if diff -q $src $dest 2>&1 > /dev/null; then
+        echo -en "${GREEN}              Up-to-date${ENDC}"
+      else
+        if [[ $(stat -c%Y $src) -gt $(stat -c%Y $dest) ]]; then
+          changes="Older"
+        else
+          changes="Newer"
+        fi
+        if [[ -z $FORCE ]]; then
+          echo -en "${YELLOW}     $changes Changes Exist${ENDC}"
+          if [[ -z $DRYRUN ]]; then
+            echo " ($dir) $raw"
+            echo -en "${BLUE}==> Owerwrite file? [y/n] ${ENDC}"
+            read answer
+            if [[ $answer == "y" || $answer == "Y" ]]; then
+              cp -a $src $dest
+              echo -en "             ${RED}Overwritten${ENDC}"
+            else
+              echo -en "                 ${YELLOW}Skipped${ENDC}"
+            fi
+          fi
+        else
+          cp -a $src $dest
+          echo -en "$changes (-f) > ${RED}Overwritten${ENDC}"
+        fi
       fi
     fi
-  fi
-  echo " ($dir) $raw"
+    echo " ($dir) $raw"
+  done
 }
 
 ## Archive current dotfiles function
@@ -237,31 +184,115 @@ function archive_dotfiles
     fi
   done
   # compress into a tar.gz
-  cd /tmp
-  tar -czf ${ARCHIVENAME}.tar.gz ${ARCHIVENAME}
-  cd - > /dev/null
-  cp /tmp/${ARCHIVENAME}.tar.gz .
+  cd /tmp && tar -czf ${ARCHIVENAME}.tar.gz ${ARCHIVENAME} && cd - > /dev/null && cp /tmp/${ARCHIVENAME}.tar.gz .
 }
 
-## Main function
-function main
+## Install Nerd fonts (from release *.zip)
+# parameter(1): name on the nerd font
+# parameter(2): version of the nerd font
+function install_nerdfonts
+{
+  local giturl="https://github.com/ryanoasis/nerd-fonts/releases/download"
+  local fonturl="${giturl}/$2/$1.zip"
+  local fontdir="${HOME}/.local/share/fonts"
+  local currentdir="$(pwd)"
+  # create dir
+  mkdir -p $fontdir
+  # download & unzip
+  echo -e "${GREEN}> Downloading $1 fonts${ENDC}"
+  cd /tmp && curl -fLo "${1}.zip" $fonturl && unzip -o "${1}.zip" -d $fontdir
+  # reset font cache on Linux
+  if which fc-cache >/dev/null 2>&1 ; then
+    echo -e "${GREEN}> Resetting font cache${ENDC}"
+    fc-cache -vf $fontdir
+  fi
+  cd $currentdir
+}
+
+## Install Tmux plugin manager
+function install_tpm
+{
+  local tpmurl="https://github.com/tmux-plugins/tpm"
+  local tpmdir="${HOME}/.tmux/plugins/tpm"
+  if [[ -d $tpmdir ]]; then
+    echo -e "${GREEN}> Tmux plugin manager already installed${ENDC}"
+  else
+    echo -e "${GREEN}> Downloading Tmux plugin manager${ENDC}"
+    git clone $tpmurl $tpmdir
+    [[ -f ${HOME}/.tmux.conf ]] && tmux source ${HOME}/.tmux.conf
+  fi
+}
+
+## Install (extra) dependencies
+function install_deps
+{
+  local fontname="DejaVuSansMono"
+  local fontversion="v2.1.0" # Feb. 02, 2020
+  if [[ -z $DRYRUN ]]; then
+    install_nerdfonts $fontname $fontversion
+    install_tpm
+  else
+    echo "> Install $fontname Nerd Fonts ($fontversion)"
+    echo "> Install Tmux plugin manager (from github)"
+  fi
+}
+
+## Upload dotfiles function
+function upload_dotfiles
 {
   # list all versioned files in the common dir
-  for src in $(git ls-files $BASEDIR/$ENVNAME $(echo "$@" | grep "." | perl -pe "s|^|$BASEDIR/|"))
-  do
+  for src in $(git ls-files $BASEDIR/$ENVNAME $(echo "$@" | grep "." | perl -pe "s|^|$BASEDIR/|")); do
     raw=$(echo $src | perl -pe 's|^\w+/||')
     dir=$(echo $src | perl -pe 's|^(\w+)/.*|$1|')
     dest="$DESTDIR/$raw"
 
-    [[ ! -z $SYNC   ]] && sync_dotfiles
-    [[ ! -z $UPLOAD ]] && upload_dotfiles
+    if [[ ! -f $dest ]]; then
+      echo -en "${CYAN}            Missing File${ENDC}"
+    else
+      if diff -q $src $dest 2>&1 > /dev/null; then
+        echo -en "${GREEN}              Up-to-date${ENDC}"
+      else
+        if [[ $(stat -c%Y $dest) -gt $(stat -c%Y $src) ]]; then
+          changes="Older"
+        else
+          changes="Newer"
+        fi
+        if [[ -z $FORCE ]]; then
+          echo -en "${YELLOW}     $changes Changes Exist${ENDC}"
+          if [[ -z $DRYRUN ]]; then
+            echo " ($dir) $raw"
+            echo -en "${BLUE}==> Overwrite, Edit (show diffs) or Ignore? [o/e/i] ${ENDC}"
+            read answer
+            if [[ $answer == "o" ]] || [[ $answer == "O" ]]; then
+              cp -a $dest $src
+              echo -en "${RED}             Overwritten${ENDC}"
+            elif [[ $answer == "e" ]] || [[ $answer == "E" ]]; then
+              vim $src -c "vert diffsplit $dest"
+              if diff -q $src $dest 2>&1 > /dev/null; then
+                  echo -en "${GREEN}                 Updated${ENDC}"
+              else
+                  echo -en "${YELLOW}               Unchanged${ENDC}"
+              fi
+            else
+              echo -en "                 ${YELLOW}Skipped${ENDC}"
+            fi
+          fi
+        else
+          cp -a $dest $src
+          echo -en "$changes (-f) > ${RED}Overwritten${ENDC}"
+        fi
+      fi
+    fi
+    echo " ($dir) $raw"
   done
 }
 
+## Main function
 process_opts $@
-if [ ! -z $ARCHIVE ]; then
-  archive_dotfiles
-fi
-main
+[[ ! -z $ARCHIVE ]] && archive_dotfiles
+[[ ! -z $INSTALL ]] && install_deps
+[[ ! -z $SYNC    ]] && sync_dotfiles
+[[ ! -z $UPLOAD  ]] && upload_dotfiles
+exit 0
 
 # vim: set shiftwidth=2:

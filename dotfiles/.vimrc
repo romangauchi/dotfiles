@@ -133,6 +133,9 @@ Plug 'vhda/verilog_systemverilog.vim'
 Plug 'pangloss/vim-javascript'
 Plug 'chrisbra/unicode.vim', { 'for': 'journal' }
 
+""" Preview color in Vim
+Plug 'ap/vim-css-color'
+
 """ SuperTab (between auto-completion and snippets-completion)
 Plug 'ervandew/supertab'
 
@@ -161,6 +164,7 @@ Plug 'tomasr/molokai'
 Plug 'jnurmine/Zenburn'
 Plug 'altercation/vim-colors-solarized'
 Plug 'rainux/vim-desert-warm-256'
+Plug 'joshdick/onedark.vim'
 " Plug 'chriskempson/base16-vim'
 " Plug 'flazz/vim-colorschemes'
 
@@ -371,6 +375,7 @@ inoremap <expr> <C-H> <sid>check_blank_line() ? "<C-H>" : "<C-\><C-o>db"
 inoremap <expr> <C-BS> <sid>check_blank_line() ? "<C-BS>" : "<C-\><C-o>db"
 " TODO: <Ctrl+Delete> | Forward word deletion
 " RG: fixdel issues (no mappings)
+" inoremap <C-Delete> <C-\><C-o>dw
 
 " ----------------------------------------------------------------------------
 " Fn mappings
@@ -819,6 +824,7 @@ augroup end
 augroup commentary
   au FileType cpp setlocal commentstring=//\ %s
   au FileType cfg setlocal commentstring=#\ %s
+  au FileType xdefaults setlocal commentstring=!\ %s
 augroup end
 
 " ----------------------------------------------------------------------------

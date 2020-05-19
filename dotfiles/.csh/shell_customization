@@ -62,15 +62,29 @@ set correct=cmd
 ##  Prompt
 #####################################
 
-# default option values
-if ( ! ${?colorbg}       ) then
-    (xrdb -query)                      >& /dev/null && setenv colorbg 1   || setenv colorbg 0          # no color bg in console out of X
+#====================================
+#  Default option values
+#====================================
+
+# no color bg in console out of X
+if ( ! ${?colorbg} ) then
+    (xrdb -query) >& /dev/null && setenv colorbg 1 || setenv colorbg 0
 endif
-if ( ! ${?powerline}     ) then
-    (xrdb -query | grep -q Powerline ) >& /dev/null && setenv powerline 1 || setenv powerline 0        # check if selected in .Xresources
+
+# check if selected in .Xresources
+if ( ! ${?powerline} ) then
+    (xrdb -query | grep -E 'Powerline|Nerd\ Font|DejaVuSansMono\ NF') >& /dev/null && setenv powerline 1 || setenv powerline 0
 endif
-if ( ! ${?gitstatus}     )                                                   setenv gitstatus 1        # activate git status by default
-if ( ! ${?prompt_notify} )                                                   setenv prompt_notify '' # use bell as notifier at each prompt
+
+# activate git status by default
+if ( ! ${?gitstatus} ) then
+    setenv gitstatus 1
+endif
+
+# use bell as notifier at each prompt
+if ( ! ${?prompt_notify} ) then
+    setenv prompt_notify ''
+endif
 
 # disable automatic virtual environment print on prompt
 setenv VIRTUAL_ENV_DISABLE_PROMPT 1
@@ -102,7 +116,10 @@ endif
 set ctlhead = "${vt_dcs}"
 set ctltail = "${vt_ct}${vt_st}"
 
-# default themes
+#====================================
+#  Default themes
+#====================================
+
 # /!\ DO NOT CHANGE HERE, USE THOSE VARIABLES IN YOUR ~/.csh/cshrc.perso /!\
 set themes_dir="${HOME}/.themes"
 if ( ! ${?background} )  set background  = "dark"

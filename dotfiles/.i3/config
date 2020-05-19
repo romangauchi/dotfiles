@@ -29,7 +29,7 @@ hide_edge_borders smart
 # ----------------------------------------------------------------------------
 
 # Start a terminal
-bindsym $mod+Return exec xterm
+bindsym $mod+Return exec urxvt
 # Start dmenu (a program launcher)
 bindsym $mod+d exec dmenu_run
 bindsym $mod+space exec --no-startup-id rofi -show drun
@@ -138,12 +138,13 @@ bindsym XF86AudioMute        exec --no-startup-id "~/.i3/scripts/audio-toggle.sh
 # Lock screen
 bindsym $mod+Delete exec --no-startup-id blurlock
 # Screen configuration
-bindsym $mod+p exec --no-startup-id arandr
+bindsym $mod+p exec arandr
+# Explorer
+bindsym $mod+e exec thunar
 
 bindsym $mod+F1 exec firefox
-bindsym $mod+F2 exec "xdg-open ~"
+bindsym $mod+F2 exec thunar
 bindsym $mod+F3 exec spotify
-bindsym $mod+F7 exec alsamixer
 
 # ----------------------------------------------------------------------------
 #  Workspace mappings
@@ -239,7 +240,7 @@ for_window [class="Pamac-manager"] floating enable
 # ----------------------------------------------------------------------------
 
 # Screen configuration
-exec --no-startup-id "~/.i3/scripts/auto-xrandr.sh"
+exec --no-startup-id --no-startup-id "~/.i3/scripts/autorun-xrandr.sh"
 # Background
 exec_always --no-startup-id nitrogen --restore
 # Network applet
@@ -248,6 +249,8 @@ exec --no-startup-id nm-applet
 exec --no-startup-id "sleep 3; systemctl --user start redshift-gtk"
 # Sound section
 exec --no-startup-id spotify
+# Dropbox
+exec --no-startup-id dropbox start
 # i3bar disable, easier configuration with Polybar
 # bar {status_command i3status}
 exec_always --no-startup-id "killall -q polybar; polybar -r mainbar-i3"

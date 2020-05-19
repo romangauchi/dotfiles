@@ -1,110 +1,214 @@
-!! Default colors: roman-dark colorscheme
+!! ---------------------------------------------------------------------------
+!! File: .Xresources
+!! 
+!! Useful links and examples:
+!! - https://www.linuxsecrets.com/archlinux-wiki/wiki.archlinux.org/index.php/Xterm.html
+!! - https://lukas.zapletalovi.com/2013/07/hidden-gems-of-xterm.html
+!! - Example: https://www.in-ulm.de/~mascheck/X11/XTerm
+!! ---------------------------------------------------------------------------
 
-#define C_black         #2c2c2c
-#define C_red           #ff3936
-#define C_green         #7da214
-#define C_yellow        #f0dfaf
-#define C_blue          #9ab8d7
-#define C_magenta       #dc8cc3
-#define C_cyan          #268bd2
-#define C_white         #fdf6e3
-#define C_bold_black    #2c2c2c
-#define C_bold_red      #ff3936
-#define C_bold_green    #7da214
-#define C_bold_yellow   #f0dfaf
-#define C_bold_blue     #9ab8d7
-#define C_bold_magenta  #dc8cc3
-#define C_bold_cyan     #268bd2
-#define C_bold_white    #fdf6e3
+!! Default theme: Roman-Dark
+!! (can be imported)
+#define C_Black         #2c2c2c
+#define C_Red           #ff3936
+#define C_Green         #7da214
+#define C_Yellow        #f0dfaf
+#define C_Blue          #9ab8d7
+#define C_Magenta       #dc8cc3
+#define C_Cyan          #268bd2
+#define C_White         #fdf6e3
+#define C_Bold_Black    #2c2c2c
+#define C_Bold_Red      #ff3936
+#define C_Bold_Green    #7da214
+#define C_Bold_Yellow   #f0dfaf
+#define C_Bold_Blue     #9ab8d7
+#define C_Bold_Magenta  #dc8cc3
+#define C_Bold_Cyan     #268bd2
+#define C_Bold_White    #fdf6e3
 
-#define C_background    #222222
-#define C_foreground    #fdf6e3
+#define C_Background    #222222
+#define C_Foreground    #fdf6e3
 
-!! system colors
-*background:            C_background
-*foreground:            C_foreground
-*cursorColor:           C_foreground
-*pointerColorBackground:C_bold_cyan
-*pointerColorForeground:C_bold_green
+!! ---------------------------------------------------------------------------
+!! Common settings
+!! ---------------------------------------------------------------------------
 
-!! colors dark/light
-*color0:                C_black
-*color1:                C_red
-*color2:                C_green
-*color3:                C_yellow
-*color4:                C_blue
-*color5:                C_magenta
-*color6:                C_cyan
-*color7:                C_white
-*color8:                C_bold_black
-*color9:                C_bold_red
-*color10:               C_bold_green
-*color11:               C_bold_yellow
-*color12:               C_bold_blue
-*color13:               C_bold_magenta
-*color14:               C_bold_cyan
-*color15:               C_bold_white
+! Colors
+*background:        C_Background
+*foreground:        C_Foreground
+*cursorColor:       C_Foreground
+*scrollColor:       C_Background
+*troughColor:       C_Background
+*borderColor:       C_Background
 
-!! XTerm terminal
-XTerm*termName: xterm-256color
-XTerm*boldColors: false
-xterm*background: C_background
-xterm*foreground: C_foreground
-xterm*cursorColor: C_foreground
-XTerm*charClass: 45-47:48, 64:48, 126:48
-XTerm*cutNewline: true
-XTerm*cutToBeginningOfLine: true
-XTerm*faceName: DejaVu Sans Mono for Powerline
+! dark/light
+*color0:            C_Black
+*color1:            C_Red
+*color2:            C_Green
+*color3:            C_Yellow
+*color4:            C_Blue
+*color5:            C_Magenta
+*color6:            C_Cyan
+*color7:            C_White
+*color8:            C_Bold_Black
+*color9:            C_Bold_Red
+*color10:           C_Bold_Green
+*color11:           C_Bold_Yellow
+*color12:           C_Bold_Blue
+*color13:           C_Bold_Magenta
+*color14:           C_Bold_Cyan
+*color15:           C_Bold_White
+
+! Fix the ctrl+backspace key
+*backarrowKey: false
+*ttyModes: erase ^?
+
+! Popup menu geometry
+*VT100.geometry: 80x40
+! Triple click selection
+! I don t want these to separate words: ! # $ % + - . / : @ ~
+*VT100.charClass: 33:48,35-37:48,43:48,45-47:48,58:48,64:48,126:48
+
+! Reminder (ascii table):
+!   !    dc   #    $    %    &    sc   (    )    *    +    ,    -    .    / 
+!   33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,
+!   :    ;    <    =    >    ?    @        
+!   58,  59,  60,  61,  62,  63,  64,      
+!   [    \    ]    ^    _    `    {    |    }    ~  
+!   91,  92,  93,  94,  48,  96,  123, 124, 125, 126,
+
+!! ---------------------------------------------------------------------------
+!!  XTerm terminal appearance
+!! ---------------------------------------------------------------------------
+
+! default
+XTerm*font: -*-terminus-medium-*-*-*-18-*-*-*-*-*-iso10646-1
+! unreadable
+XTerm*font1: -*-terminus-medium-*-*-*-12-*-*-*-*-*-iso10646-1
+! tiny
+XTerm*font2: -*-terminus-medium-*-*-*-14-*-*-*-*-*-iso10646-1
+! small
+XTerm*font3: -*-terminus-medium-*-*-*-16-*-*-*-*-*-iso10646-1
+! medium
+XTerm*font4: -*-terminus-medium-*-*-*-22-*-*-*-*-*-iso10646-1
+! large
+XTerm*font5: -*-terminus-medium-*-*-*-24-*-*-*-*-*-iso10646-1
+! huge
+XTerm*font6: -*-terminus-medium-*-*-*-32-*-*-*-*-*-iso10646-1
+
+XTerm*faceName: DejaVuSansMono NF:style=Book:antohint=true
 XTerm*faceSize: 12
-XTerm*scrollBar: false
-XTerm*scrollKey: true
-XTerm*rightScrollBar: true
-XTerm*bellIsUrgent: true
-XTerm*geometry: 100x30
-XTerm*disallowedWindowOps: 20,21,SetXprop
-XTerm*saveLines: 4096
-!! Fix the backspace key
-XTerm.vt100.backarrowKey: false
-XTerm.ttyModes: erase ^?
 
-!! UXTerm terminal
-UXTerm*faceName: DejaVu Sans Mono for Powerline
+XTerm*termName: xterm-256color
+XTerm*saveLines: 4096
+XTerm*scrollBar: false
+XTerm*rightScrollBar: true
+XTerm*scrollTtyOutput: true
+XTerm*bellIsUrgent: true
+XTerm*selectToClipboard: true
+! to scroll down anytime you press a key
+XTerm*scrollKey: true
+
+XTerm.url-select.launcher: firefox
+XTerm.url-select.underline: true
+XTerm.url-select.button: 1
+
+! Disable fullscreen shortcut (Alt+Enter)
+!XTerm*fullscreen: never
+
+!! ---------------------------------------------------------------------------
+!!  UXTerm terminal appearance
+!! ---------------------------------------------------------------------------
+
+! default
+UXTerm*font: -*-terminus-medium-*-*-*-18-*-*-*-*-*-iso10646-1
+! unreadable
+UXTerm*font1: -*-terminus-medium-*-*-*-12-*-*-*-*-*-iso10646-1
+! tiny
+UXTerm*font2: -*-terminus-medium-*-*-*-14-*-*-*-*-*-iso10646-1
+! small
+UXTerm*font3: -*-terminus-medium-*-*-*-16-*-*-*-*-*-iso10646-1
+! medium
+UXTerm*font4: -*-terminus-medium-*-*-*-22-*-*-*-*-*-iso10646-1
+! large
+UXTerm*font5: -*-terminus-medium-*-*-*-24-*-*-*-*-*-iso10646-1
+! huge
+UXTerm*font6: -*-terminus-medium-*-*-*-32-*-*-*-*-*-iso10646-1
+
+UXTerm*faceName: DejaVuSansMono NF:style=Book:antohint=true
 UXTerm*faceSize: 12
 
-!! uxterm terminal
-URxvt*termName: xterm-256color
-URxvt*geometry: 100x30
-!!URxvt*loginShell: true
-URxvt*background: C_background
-URxvt*foreground: C_foreground
-URxvt*scrollColor: C_bold_blue
-URxvt*troughColor: C_bold_yellow
-URxvt*borderColor: C_bold_green
+UXTerm*termName: xterm-256color
+UXTerm*saveLines: 4096
+UXTerm*scrollBar: false
+
+!! ---------------------------------------------------------------------------
+!!  URxvt terminal appearance
+!! ---------------------------------------------------------------------------
+
+! Fonts
+URxvt*font:           xft:DejaVuSansMono NF:style=Book:autohint=true:size=12
+URxvt*fontBold:       xft:DejaVuSansMono NF:style=Bold:autohint=true:size=12
+URxvt*italicFont:     xft:DejaVuSansMono NF:style=Oblique:autohint=ture:size=12
+URxvt*boldItalicFont: xft:DejaVuSansMono NF:style=Bold Oblique:autohint=true:size=12
+!URxvt*.letterSpace:   0
+!URxvt*.lineSpace:     0
 URxvt*dynamicColors: on
-URxvt*scrollstyle: plain
-URxvt*scrollTtyKeypress: true
-URxvt*scrollTtyOutput: false
-URxvt*scrollWithBuffer: true
-URxvt*secondaryScreen: true
-URxvt*secondaryScroll: false
-URxvt*skipScroll: false
+URxvt*termName: xterm-256color
+URxvt*saveLines: 4096
+URxvt*cursorBlink: true
+URxvt*borderLess: false
+URxvt*externalBorder: 0
+URxvt*internalBorder: 1
 URxvt*scrollBar: false
 URxvt*scrollBar_right: true
 URxvt*scrollBar_floating: false
+URxvt*scrollBar_align: false
+! do not scroll with output
+URxvt*scrollTtyKeypress: false
+! scroll back to the bottom on keypress
+URxvt*scrollTtyOutput: true
+! scroll in relation to buffer (with mouse scroll of Shift+PageUp)
+URxvt*scrollWithBuffer: true
+! scroll in a pager in a secondary screen
+URxvt*secondaryScreen: true
+URxvt*secondaryScroll: false
+URxvt*skipScroll: false
 URxvt*utmpInhibit: false
 URxvt*urgentOnBell: true
 URxvt*visualBell: false
 URxvt*mapAlert: true
 URxvt*mouseWheelScrollPage: true
-URxvt*font: xft:DejaVu\ Sans\ Mono\ for\ Powerline:pixelsize=12
-!URxvt*boldFont: xft:DejaVu Sans Mono for Powerline:bold:autohint=true:pixelsize=12
-!URxvt*italicFont: xft:DejaVu Sans Mono for Powerline:italic:autohint=true:pixelsize=12
-!URxvt*boldItalicFont: xft:DejaVu Sans Mono for Powerline:bold:italic:autohint=true:pixelsize=12
-URxvt*saveLines: 4096
 URxvt*buffered: true
 URxvt*hold: false
-URxvt*internalBorder:
 URxvt*print-pipe: cat > $HOME/$(echo urxvt.dump.$(date +'%Y%M%d%H%m%S'))
-URxvt*perl-ext-common:
+! Perl extensions
+URxvt*perl-ext-common: default,resize-font,clipboard,url-select,keyboard-select
 URxvt*perl-ext:
+! Resize font
+URxvt.keysym.Control-Minus: resize-font:smaller
+URxvt.keysym.Control-Plus: resize-font:bigger
+! Clipbord
+URxvt.clipboard.autocopy: true
+URxvt.keysym.M-c: perl:clipboard:copy
+URxvt.keysym.M-v: perl:clipboard:paste
+URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
+! URL select
+URxvt.url-select.launcher: firefox
+URxvt.url-select.underline: true
+URxvt.url-select.button: 1
+! Keyboard select
+URxvt.keysym.M-Escape: perl:keyboard-select:activate
+URxvt.keysym.M-s: perl:keyboard-select:search
+! Common Keybinds for Navigations
+URxvt.keysym.Control-Up:\033[1;5A
+URxvt.keysym.Control-Down:\033[1;5B
+URxvt.keysym.Control-Left:\033[1;5D
+URxvt.keysym.Control-Right:\033[1;5C
+URxvt.keysym.Shift-Up: command:\033]720;1\007
+URxvt.keysym.Shift-Down: command:\033]721;1\007
+URxvt.keysym.Home: \033[1~
+URxvt.keysym.End: \033[4~
+URxvt.keysym.KP_Home: \033[1~
+URxvt.keysym.KP_End: \033[4~
 

@@ -88,11 +88,21 @@ fi
 #   Prompt
 #####################################
 
-# default option values
-[[ -z "${colorbg+unset}"       ]] &&  xrdb -query                   &> /dev/null && export colorbg=1          # no color bg in console out of X
-[[ -z "${powerline+unset}"     ]] && (xrdb -query | grep Powerline) &> /dev/null && export powerline=1        # check if selected in .Xresources
-[[ -z "${gitstatus+unset}"     ]]                                                && export gitstatus=1        # activate git status by default
-[[ -z "${prompt_notify+unset}" ]]                                                && export prompt_notify='' # use bell as notifier at each prompt
+#====================================
+#  Default option values
+#====================================
+
+# no color bg in console out of X
+[[ -z "${colorbg+unset}" ]] && xrdb -query &> /dev/null && export colorbg=1
+  
+# check if selected in .Xresources
+[[ -z "${powerline+unset}" ]] && xrdb -query | grep -E 'Powerline|Nerd\ Font|DejaVuSansMono\ NF' &> /dev/null && export powerline=1
+
+# activate git status by default
+[[ -z "${gitstatus+unset}" ]] && export gitstatus=1
+
+# use bell as notifier at each prompt
+[[ -z "${prompt_notify+unset}" ]] && export prompt_notify=''
 
 # Special keys for every terminals
 if [ -n "${STY}" ]; then # we are in a screen session
@@ -121,7 +131,10 @@ fi
 ctlhead="${vt_dcs}"
 ctltail="${vt_ct}${vt_st}"
 
-# default themes
+#====================================
+#  Default themes
+#====================================
+
 # /!\ DO NOT CHANGE HERE, USE THOSE VARIABLES IN YOUR ~/.bash/bashrc.perso /!\
 themes_dir="${HOME}/.themes"
 [[ -z "${background}" ]]        && background="dark"

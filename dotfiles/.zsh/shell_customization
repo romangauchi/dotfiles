@@ -4,16 +4,42 @@
 ##  Shell customization
 #####################################
 
-# additional bindkeys as in zsh
-bindkey "[1~" beginning-of-line   # Home
-bindkey "^[[4~" end-of-line         # End
+# additional key bindings
+bindkey "[1~" beginning-of-line       # [Home]
+bindkey "^[[4~" end-of-line             # [End]
+# for rxvt
+bindkey "^[[7~" beginning-of-line       # [Home]
+bindkey "^[[8~" end-of-line             # [End]
+# for non RH/Debian xterm, can't hurt for RH/DEbian xterm
+bindkey "^[OH" beginning-of-line        # [Home]
+bindkey "^[OF" end-of-line              # [End]
+# for freebsd console
+bindkey "^[[H" beginning-of-line        # [Home]
+bindkey "^[[F" end-of-line              # [End]
+
+# bindkey "^H" backward-delete-word       # [Ctrl+Backspace]
+# bindkey "^?" backward-delete-char       # [Backspace]
+bindkey '^[[1;5C' forward-word          # [Ctrl-RightArrow]
+bindkey '^[[1;5D' backward-word         # [Ctrl-LeftArrow]
+
+bindkey "^[[3~" delete-char             # [Delete]
+bindkey "^[3;5~" delete-char            # [Delete]
+bindkey "\e[3~" delete-char             # [Delete]
 
 #####################################
 #   Prompt
 #####################################
 
-#default option values
-[[ -z "${colorbg+unset}"       ]] &&  xrdb -query                   &> /dev/null && export colorbg=1          # no color bg in console out of X
-[[ -z "${powerline+unset}"     ]] && (xrdb -query | grep Powerline) &> /dev/null && export powerline=1        # check if selected in .Xresources
-[[ -z "${gitstatus+unset}"     ]]                                                && export gitstatus=1        # activate git status by default
-[[ -z "${prompt_notify+unset}" ]]                                                && export prompt_notify='' # use bell as notifier at each prompt
+### Default option values
+
+# no color bg in console out of X
+[[ -z "${colorbg+unset}" ]] && xrdb -query &> /dev/null && export colorbg=1
+  
+# check if selected in .Xresources
+[[ -z "${powerline+unset}" ]] && xrdb -query | grep -E 'Powerline|Nerd\ Font|DejaVuSansMono\ NF' &> /dev/null && export powerline=1
+
+# activate git status by default
+[[ -z "${gitstatus+unset}" ]] && export gitstatus=1
+
+# use bell as notifier at each prompt
+[[ -z "${prompt_notify+unset}" ]] && export prompt_notify=''
