@@ -1,41 +1,39 @@
 # Dotfiles
 
-![Screenshot of my Tmux configuration](https://raw.githubusercontent.com/wiki/romangauchi/dotfiles/screenshots/dotfiles-01.png)
+![Screenshot of my Tmux configuration](https://raw.githubusercontent.com/wiki/romangauchi/dotfiles/screenshots/dotfiles-02.png)
 
 ## Installation
 
-Clone the dotfiles repertory wherever you want and use the `dotfiles-manager.sh` script to synchronize the dotfiles and install dependencies to your personal home directory.
+1. Clone the dotfiles repertory anywhere you want
+2. Archive (`-A`) your current configuration files
+3. Synchronize (`-S`) and install (`-I`) dependencies with `dotfiles-manager.sh`
+4. Restart another shell, it will works!
 
 ~~~
 git clone https://github.com/romangauchi/dotfiles.git
 cd dotfiles
-./dotfiles-manager.sh -S
+./dotfiles-manager.sh -ASI
 ~~~
 
 ### Dependencies
 
-Install dependencies with the `dotfiles-manager.sh`:
+The `dotfiles-manager.sh` installs the following dependencies on your system:
+
+- **Nerd Fonts**: project including glyph (icons) from popular fonts as *Font Awesome*, *Powerline*, *Devicons* on [github](https://github.com/ryanoasis/nerd-fonts).
+- **Tmux Plugin Manager**: support plugins on `Tmux` [github](https://github.com/tmux-plugins/tpm#installation).
+
+### `dotfiles-manager.sh`
+
+The `dotfiles-manager.sh` deploys the environment on the current HOME directory or a given destination directory (`--home <my-workspace>`). The installation copies the content of the dotfiles directory and installs the required dependencies. Additional arguments can be used to preview modifications (`-n`,`--dry-run`) or to overwrite files without prompting (`-f`, `--force`).
 
 ~~~
-./dotfiles-manager.sh -I
-~~~
+Usage: dotfiles-manager.sh <operations> [options]
 
-The following dependencies will be automatically installed on your system:
+Operations:
+  -S, --sync            synchronize dotfiles to the HOME directory
+  -I, --install         install extra dependencies (fonts)
+  -A, --archive         save your current dotfiles in an archive
 
-- **Nerd Fonts**: font project including glyph (icons) from popular font projects as *Font Awesome*, *Powerline*, *Devicons* [github project](https://github.com/ryanoasis/nerd-fonts).
-- **Tmux Plugin Manager**: to support plugins on `Tmux` [github project](https://github.com/tmux-plugins/tpm#installation).
-
-### Archive your environment
-
-Before every modifications your can save your current configuration in a archive (*.tar.gz).
-
-~~~
-./dotfiles-manager.sh -A --output <my-dotfiles>
-~~~
-
-### `dotfiles-manager.sh` options
-
-~~~
 Options:
       --home[=]<dir>    give another home destination directory
                         (default: <your-home-dir>)
@@ -57,7 +55,7 @@ You can freely improve your environment by editing `{zsh|bash|csh}rc.perso` and 
 
 You're good to go! The plugin was cloned to `~/.tmux/plugins/` directory and sourced.
 
-### New color theme
+### New color theme (zsh, bash & csh)
 
 Download color configuration files from this [github project](https://github.com/Mayccoll/Gogh), choose your [theme](https://mayccoll.github.io/Gogh/) and download it into your environment with this command.
 
