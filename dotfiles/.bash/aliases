@@ -34,7 +34,6 @@ alias     tt='tree -ACF'
 alias    ttd='tt -d'
 alias    tta='tt -a'
 alias   path='echo $PATH'
-alias   dirs='dirs -v'
 
 alias    duh='du -shc ~/* | sort -n'
 alias    dul='du -shc ./* | sort -n'
@@ -62,6 +61,7 @@ alias     gr='git repo && cd `git root` || git root'
 
 # Tmux
 alias     tl='tmux list-session'
+alias     ta='tmux attach -t'
 alias     tn='tmux new-session'
 alias     tw='tmux new-window'
 alias     ts='tmux split-window'

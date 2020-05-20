@@ -15,7 +15,7 @@
 
 ### Bugs found
 
-- [ ] Home key behavior under Tmux with URxvt (need to resource to correct)
+- [x] Home key behavior under Tmux with URxvt (need to resource to correct)
 - [ ] wrong cursor color after check spelling on Vim
 - [ ] Ctrl+BS mapping not working on U/Xterm by default (works with Tmux)
 - [ ] hard to implement Ctrl+Delete shorcut on Vim!
