@@ -1,23 +1,30 @@
-# vim: ft=conf:
+!! vim: ft=xdefaults
+!!----------------------------------------------------------------------------
+!! Description: Rofi color theme
+!! Author: Roman Gauchi
+!!----------------------------------------------------------------------------
 
-# Colors
+!! Colors
 rofi.color-enabled: true
-rofi.color-window: argb:e8222D32,argb:00292f37,#EBCB8B
-rofi.color-normal: argb:02000000,#D8DEE9,argb:02000000,argb:02000000,#EBCB8B
-rofi.color-active: argb:02000000,#D8DEE9,argb:02000000,argb:02000000,#D8DEE9
-rofi.color-urgent: argb:02000000,#D8DEE9,argb:02000000,argb:02000000,#D8DEE9
+!                   bg          border      separator
+rofi.color-window:  #222222,    #ffb52a,    #ffb52a
+!                   bg          fg          bg-alt      hl-bg       hf-fg
+rofi.color-normal:  #222222,    #fdf6e3,    #222222,    #444444,    #f0dfaf
+rofi.color-active:  #222222,    #fdf6e3,    #9ab8d7,    #9ab8d7,    #000000
+rofi.color-urgent:  #222222,    #fdf6e3,    #ff3936,    #ff3936,    #000000
 
-# Fonts
-rofi.font: System San Francisco Display 14
-rofi.eh: 1
+!! Fonts
+rofi.font: DejaVu Sans 14
 rofi.hide-scrollbar: true
-# Geometry
-rofi.separator-style: solid
-rofi.line-margin: 10
-rofi.lines: 10
+
+!! Geometry
 rofi.width: 50
+rofi.borderwidth: 2
+rofi.line-margin: 10
 rofi.padding: 20
-rofi.bw: 3
 rofi.show-icons: true
-# rofi.fullscreen: true
+rofi.separator-style: solid
+! number application shown
+rofi.lines: 12
+!rofi.fullscreen: true
 
