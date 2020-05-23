@@ -1,0 +1,132 @@
+/*****************************************************************************
+ * Author : Roman Gauchi
+ * Original Author: Aditya Shakya (adi1090x)
+ * https://github.com/adi1090x/rofi
+ ****************************************************************************/
+
+* {
+  accent:           #7da214;
+  background:       #000000;
+  background-light: #222222;
+  foreground:       #93a1a1;
+  on:               #9ab8d7;
+  off:              #ff3936;
+}
+
+/* ########### */
+
+* {
+  /* General */
+  text-font:                    "DejaVu Sans 12";
+  icon-font:                    "DejaVuSansMono NF 32";
+  icon-font-small:              "DejaVuSansMono NF 24";
+
+  /* Geometry */
+  option-6-listview-spacing:    10px;
+
+  menu-inputbar-margin:         10px 0px;
+  menu-prompt-margin:           0px 0px 0px -2px;
+  menu-element-border:          20px;
+  /*                            top&bottom left&right */
+  menu-window-padding:          5px 15px;
+  /*                            top, right, bottom, left */
+  menu-prompt-padding:          10px 20px 10px 20px;
+  menu-element-padding:         0px  12px 2px -45px;
+}
+
+/* ########### */
+
+#window {
+  width: 526px;
+  height: 175px;
+}
+
+/* ########### */
+
+* {
+  background-color: @background;
+  text-color: @foreground;
+  font: @icon-font;
+}
+
+#horibox {
+  children: [ listview ];
+}
+#listview {
+  layout: horizontal;
+}
+#element {
+  padding: @option-element-padding;
+  background-color: @background-light;
+}
+#element.selected {
+  background-color: @accent;
+  text-color: @background;
+}
+
+/* ########### */
+
+* {
+  font: @text-font;
+}
+#window {
+  padding: @menu-window-padding;
+  children: [ inputbar, horibox ];
+}
+#inputbar {
+  children: [ textbox-prompt-colon, prompt ];
+  margin: @menu-inputbar-margin;
+}
+prompt,
+textbox-prompt-colon {
+  padding: @menu-prompt-padding;
+  border: 2px;
+  border-color: @accent;
+}
+#prompt {
+  margin: @menu-prompt-margin;
+  background-color: @background-light;
+  text-color: @accent;
+}
+#textbox-prompt-colon {
+  expand: false;
+  str: "System";
+  background-color: @accent;
+  text-color: @background;
+}
+#horibox {
+  padding: 0px;
+}
+#listview {
+  spacing: @option-6-listview-spacing;
+  lines: 5;
+}
+#element {
+  font: @icon-font;
+  border: @menu-element-border;
+  padding: @menu-element-padding;
+  border-color: @background-light;
+}
+#element.selected {
+  border-color: @accent;
+}
+element.active,
+element.selected.urgent {
+  background-color: @on;
+  text-color: @background;
+  border-color: @on;
+}
+element.selected.urgent {
+  border-color: @accent;
+}
+element.urgent,
+element.selected.active {
+  background-color: @off;
+  text-color: @background;
+  border-color: @off;
+}
+element.selected.active {
+  border-color: @accent;
+}
+
+/* vim: set ft=css sw=2: */

@@ -4,6 +4,7 @@
 # Author: Roman Gauchi
 # ----------------------------------------------------------------------------
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
+# > https://wiki.archlinux.org/index.php/I3
 # ============================================================================
 
 # Set mod key (Mod1=<Alt>, Mod4=<Super>)
@@ -29,7 +30,7 @@ hide_edge_borders smart
 # ----------------------------------------------------------------------------
 
 # Start a terminal
-bindsym $mod+Return exec urxvt
+bindsym $mod+Return exec konsole
 # Start dmenu (a program launcher)
 bindsym $mod+d exec dmenu_run
 bindsym $mod+space exec --no-startup-id rofi -show drun
@@ -90,25 +91,25 @@ bindsym $mod+q focus parent
 #bindsym $mod+s focus child
 
 # Change focus
-bindsym $mod+h focus left
-bindsym $mod+j focus down
-bindsym $mod+k focus up
-bindsym $mod+l focus right
+bindsym $mod+h      focus left
+bindsym $mod+j      focus down
+bindsym $mod+k      focus up
+bindsym $mod+l      focus right
 # alternatively, you can use the cursor keys:
-bindsym $mod+Left focus left
-bindsym $mod+Down focus down
-bindsym $mod+Up focus up
-bindsym $mod+Right focus right
+bindsym $mod+Left   focus left
+bindsym $mod+Down   focus down
+bindsym $mod+Up     focus up
+bindsym $mod+Right  focus right
 
 # Move focused window
-bindsym $mod+Ctrl+h move left
-bindsym $mod+Ctrl+j move down
-bindsym $mod+Ctrl+k move up
-bindsym $mod+Ctrl+l move right
+bindsym $mod+Ctrl+h     move left
+bindsym $mod+Ctrl+j     move down
+bindsym $mod+Ctrl+k     move up
+bindsym $mod+Ctrl+l     move right
 # alternatively, you can use the cursor keys:
-bindsym $mod+Ctrl+Left move left
-bindsym $mod+Ctrl+Down move down
-bindsym $mod+Ctrl+Up move up
+bindsym $mod+Ctrl+Left  move left
+bindsym $mod+Ctrl+Down  move down
+bindsym $mod+Ctrl+Up    move up
 bindsym $mod+Ctrl+Right move right
 
 # ----------------------------------------------------------------------------
@@ -117,26 +118,32 @@ bindsym $mod+Ctrl+Right move right
 
 # Screen brightness
 bindsym XF86MonBrightnessUp exec "xbacklight -inc 10; notify-send 'brightness up'"
-bindsym XF86MonBrightnessDown exec "xbacklight -dec 10; notify-send 'brightness down"
+bindsym XF86MonBrightnessDown exec "xbacklight -dec 10; notify-send 'brightness down'"
+bindsym XF86Display exec "arandr"
 
 # Audio controls
-bindsym XF86AudioRaiseVolume exec --no-startup-id "amixer set Master 5%+; notify-send 'volume up'"
-bindsym $mod+F12             exec --no-startup-id "amixer set Master 5%+; notify-send 'volume up'"
-bindsym XF86AudioLowerVolume exec --no-startup-id "amixer set Master 5%-; notify-send 'volume down'"
-bindsym $mod+F11             exec --no-startup-id "amixer set Master 5%-; notify-send 'volume down'"
-bindsym XF86AudioMute        exec --no-startup-id "~/.i3/scripts/audio-toggle.sh"
+bindsym XF86AudioRaiseVolume exec --no-startup-id "~/.i3/scripts/volume.sh up"
+bindsym $mod+F12             exec --no-startup-id "~/.i3/scripts/volume.sh up"
+bindsym XF86AudioLowerVolume exec --no-startup-id "~/.i3/scripts/volume.sh down"
+bindsym $mod+F11             exec --no-startup-id "~/.i3/scripts/volume.sh down"
+bindsym XF86AudioMute        exec --no-startup-id "~/.i3/scripts/volume.sh toggle"
+bindsym $mod+F10             exec --no-startup-id "~/.i3/scripts/volume.sh toggle"
 
 # Media player controls
 # bindsym XF86AudioNext exec --no-startup-id cmus-remote --next && pkill --signal SIGRTMIN+13 i3blocks
 # bindsym XF86AudioPrev exec --no-startup-id cmus-remote --prev && pkill --signal SIGRTMIN+13 i3blocks
 # bindsym XF86AudioPlay exec --no-startup-id cmus-remote --pause && pkill --signal SIGRTMIN+13 i3blocks
 
+
 # ----------------------------------------------------------------------------
 #  Application key mapping
 # ----------------------------------------------------------------------------
 
-# Lock screen
-bindsym $mod+Delete exec --no-startup-id blurlock
+# Lock screen (Ctrl+Alt+Del)
+bindsym $mod+Delete exec --no-startup-id "~/.i3/scripts/locker.sh"
+bindsym Ctrl+Mod1+Delete exec --no-startup-id "~/.i3/scripts/locker.sh"
+# Power menu
+bindsym $mod+Pause exec "~/.config/rofi/scripts/powermenu.sh"
 # Screen configuration
 bindsym $mod+p exec arandr
 # Explorer
@@ -144,7 +151,7 @@ bindsym $mod+e exec thunar
 
 bindsym $mod+F1 exec firefox
 bindsym $mod+F2 exec thunar
-bindsym $mod+F3 exec spotify
+bindsym $mod+F9 exec spotify
 
 # ----------------------------------------------------------------------------
 #  Workspace mappings
@@ -158,40 +165,40 @@ bindsym $mod+m workspace $ws10
 
 # Workspace names
 # to display names or symbol instead of numbers you can use: set $ws1 1:mail
-set $ws1 "1"
-set $ws2 "2"
-set $ws3 "3"
-set $ws4 "4"
-set $ws5 "5"
-set $ws6 "6"
-set $ws7 "7"
-set $ws8 "8"
-set $ws9 "9"
+set $ws1  "1"
+set $ws2  "2"
+set $ws3  "3"
+set $ws4  "4"
+set $ws5  "5"
+set $ws6  "6"
+set $ws7  "7"
+set $ws8  "8"
+set $ws9  "9"
 set $ws10 "10"
 
 # Switch to workspace
-bindsym $mod+ampersand workspace $ws1
-bindsym $mod+eacute workspace $ws2
-bindsym $mod+quotedbl workspace $ws3
+bindsym $mod+ampersand  workspace $ws1
+bindsym $mod+eacute     workspace $ws2
+bindsym $mod+quotedbl   workspace $ws3
 bindsym $mod+apostrophe workspace $ws4
-bindsym $mod+parenleft workspace $ws5
-bindsym $mod+minus workspace $ws6
-bindsym $mod+egrave workspace $ws7
+bindsym $mod+parenleft  workspace $ws5
+bindsym $mod+minus      workspace $ws6
+bindsym $mod+egrave     workspace $ws7
 bindsym $mod+underscore workspace $ws8
-bindsym $mod+ccedilla workspace $ws9
-bindsym $mod+agrave workspace $ws10
+bindsym $mod+ccedilla   workspace $ws9
+bindsym $mod+agrave     workspace $ws10
 
 # Move focused container to workspace
-bindsym $mod+Shift+ampersand move container to workspace $ws1
-bindsym $mod+Shift+eacute move container to workspace $ws2
-bindsym $mod+Shift+quotedbl move container to workspace $ws3
-bindsym $mod+Shift+apostrophe move container to workspace $ws4
-bindsym $mod+Shift+5 move container to workspace $ws5
-bindsym $mod+Shift+minus move container to workspace $ws6
-bindsym $mod+Shift+egrave move container to workspace $ws7
-bindsym $mod+Shift+underscore move container to workspace $ws8
-bindsym $mod+Shift+ccedilla move container to workspace $ws9
-bindsym $mod+Shift+agrave move container to workspace $ws10
+bindsym $mod+Shift+ampersand    move container to workspace $ws1
+bindsym $mod+Shift+eacute       move container to workspace $ws2
+bindsym $mod+Shift+quotedbl     move container to workspace $ws3
+bindsym $mod+Shift+apostrophe   move container to workspace $ws4
+bindsym $mod+Shift+5            move container to workspace $ws5
+bindsym $mod+Shift+minus        move container to workspace $ws6
+bindsym $mod+Shift+egrave       move container to workspace $ws7
+bindsym $mod+Shift+underscore   move container to workspace $ws8
+bindsym $mod+Shift+ccedilla     move container to workspace $ws9
+bindsym $mod+Shift+agrave       move container to workspace $ws10
 
 # Resize window (you can also use the mouse for that)
 mode "resize" {
@@ -200,15 +207,15 @@ mode "resize" {
     # Pressing right will grow the window’s width.
     # Pressing up will shrink the window’s height.
     # Pressing down will grow the window’s height.
-    bindsym h     resize shrink width  5 px or 5 ppt
-    bindsym j     resize grow   height 5 px or 5 ppt
-    bindsym k     resize shrink height 5 px or 5 ppt
-    bindsym l     resize grow   width  5 px or 5 ppt
+    bindsym h     resize shrink width  2 px or 2 ppt
+    bindsym j     resize grow   height 2 px or 2 ppt
+    bindsym k     resize shrink height 2 px or 2 ppt
+    bindsym l     resize grow   width  2 px or 2 ppt
     # same bindings, but for the arrow keys
-    bindsym Left  resize shrink width  5 px or 5 ppt
-    bindsym Down  resize grow   height 5 px or 5 ppt
-    bindsym Up    resize shrink height 5 px or 5 ppt
-    bindsym Right resize grow   width  5 px or 5 ppt
+    bindsym Left  resize shrink width  2 px or 2 ppt
+    bindsym Down  resize grow   height 2 px or 2 ppt
+    bindsym Up    resize shrink height 2 px or 2 ppt
+    bindsym Right resize grow   width  2 px or 2 ppt
     # back to normal: Enter or Escape or $mod+r
     bindsym Return mode "default"
     bindsym Escape mode "default"
@@ -236,21 +243,27 @@ for_window [class="octopi"] floating enable
 for_window [class="Pamac-manager"] floating enable
 
 # ----------------------------------------------------------------------------
-#  Autostart applications
+#  Autostart application
 # ----------------------------------------------------------------------------
 
-# Screen configuration
-exec --no-startup-id --no-startup-id "~/.i3/scripts/autorun-xrandr.sh"
-# Background
-exec_always --no-startup-id nitrogen --restore
-# Network applet
+# screen configuration
+exec --no-startup-id "~/.i3/scripts/autorun-xrandr.sh"
+# network applet
 exec --no-startup-id nm-applet
 # Redshift applet
+# https://wiki.archlinux.org/index.php/Redshift#Automatic_location_based_on_GeoClue2
+exec --no-startup-id /usr/lib/geoclue-2.0/demos/agent
 exec --no-startup-id "sleep 3; systemctl --user start redshift-gtk"
-# Sound section
-exec --no-startup-id spotify
+# Spotify
+# exec --no-startup-id spotify
 # Dropbox
 exec --no-startup-id dropbox start
+# disk volume management
+exec --no-startup-id udiskie &
+# notifications
+exec --no-startup-id dunst --config "~/.config/dunst/dunstrc"
+# wallpaper
+exec_always --no-startup-id nitrogen --restore
 # i3bar disable, easier configuration with Polybar
 # bar {status_command i3status}
 exec_always --no-startup-id "killall -q polybar; polybar -r mainbar-i3"
