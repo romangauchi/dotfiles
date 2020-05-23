@@ -100,6 +100,7 @@ XTerm*faceName: DejaVuSansMono NF:style=Book:antohint=true
 XTerm*faceSize: 12
 
 XTerm*termName: xterm-256color
+XTerm*loginShell: true
 XTerm*saveLines: 4096
 XTerm*scrollBar: false
 XTerm*rightScrollBar: true
@@ -139,6 +140,7 @@ UXTerm*faceName: DejaVuSansMono NF:style=Book:antohint=true
 UXTerm*faceSize: 12
 
 UXTerm*termName: xterm-256color
+UXTerm*loginShell: true
 UXTerm*saveLines: 4096
 UXTerm*scrollBar: false
 
@@ -155,6 +157,7 @@ URxvt*boldItalicFont: xft:DejaVuSansMono NF:style=Bold Oblique:autohint=true:siz
 !URxvt*.lineSpace:     0
 URxvt*dynamicColors: on
 URxvt*termName: xterm-256color
+URxvt*loginShell: true
 URxvt*saveLines: 4096
 URxvt*cursorBlink: true
 URxvt*borderLess: false
