@@ -30,7 +30,7 @@ hide_edge_borders smart
 # ----------------------------------------------------------------------------
 
 # Start a terminal
-bindsym $mod+Return exec konsole
+bindsym $mod+Return exec urxvt
 # Start dmenu (a program launcher)
 bindsym $mod+d exec dmenu_run
 bindsym $mod+space exec --no-startup-id rofi -show drun

@@ -13,7 +13,7 @@
 - [ ] add irssi configuration file (remove username)
 - [ ] add windows putty (tutorial) configuration
 - [ ] add vifm configs with image/docs previews
-- [ ] support image previews in ranger
+- [x] support image previews in ranger
 
 ### Bugs found
 
