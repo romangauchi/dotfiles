@@ -12,11 +12,13 @@
 - [ ] improve gitstatus speed on bash & csh with this [project](https://github.com/romkatv/gitstatus)
 - [ ] add irssi configuration file (remove username)
 - [ ] add windows putty (tutorial) configuration
+- [ ] add vifm configs with image/docs previews
+- [ ] support image previews in ranger
 
 ### Bugs found
 
 - [x] Home key behavior under Tmux with URxvt (need to resource to correct)
-- [ ] wrong cursor color after check spelling on Vim
+- [x] wrong cursor color after check spelling on Vim
 - [ ] Ctrl+BS mapping not working on U/Xterm by default (works with Tmux)
 - [ ] hard to implement Ctrl+Delete shorcut on Vim!
 

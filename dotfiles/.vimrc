@@ -305,6 +305,10 @@ set mouse=a
 " (http://superuser.com/questions/195794/gnu-screen-shift-tab-issue)
 set t_kB=[Z
 
+" Vim changes cursor to pink and keeps it on exit
+" https://github.com/vim/vim/issues/3471
+set t_Cs=
+
 " }}}
 " ============================================================================
 " MAPPINGS {{{
