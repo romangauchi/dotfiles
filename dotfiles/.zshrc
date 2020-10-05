@@ -6,16 +6,14 @@
 
 [ -f ${HOME}/.zsh/zshrc.first ] && source ${HOME}/.zsh/zshrc.first
 
-# include oh-my-zsh environment
-[ -f ${HOME}/.zsh/plugins ] && source ${HOME}/.zsh/plugins
-
 #####################################
 ##  Shell customization
 #####################################
 
+[ -f ${HOME}/.zsh/plugins ] && source ${HOME}/.zsh/plugins
 [ -f ${HOME}/.zsh/shell_customization ] && source ${HOME}/.zsh/shell_customization
-
 [ -f ${HOME}/.zsh/prompt ] && source ${HOME}/.zsh/prompt
+[ -f ${OMZ}/oh-my-zsh.sh ] && source ${OMZ}/oh-my-zsh.sh
 
 #####################################
 ##  Aliases
