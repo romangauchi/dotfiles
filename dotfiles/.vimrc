@@ -106,15 +106,20 @@ Plug 'ctrlpvim/ctrlp.vim'
 
 """ CSV
 Plug 'chrisbra/csv.vim'
+Plug 'chrisbra/Colorizer'
 
 """ Markdown
 Plug 'plasticboy/vim-markdown'
+Plug 'dhruvasagar/vim-table-mode'
 
 """ Syntax checking hacks for vim (tip: can be launched by airline)
 Plug 'scrooloose/syntastic', { 'on': 'SyntasticCheck' }
 
 """ Syntax highlighting, indentation support
 Plug 'sheerun/vim-polyglot'
+
+""" LateX
+Plug 'lervag/vimtex'
 
 """ Grammar checker for Vim (installation should done with bash shell)
 Plug 'rhysd/vim-grammarous'
@@ -125,6 +130,7 @@ Plug 'vim-scripts/indentpython.vim'
 
 """ C/C++
 Plug 'vim-scripts/OmniCppComplete'
+Plug 'shiracamus/vim-syntax-x86-objdump-d'
 
 """ SystemVerilog
 Plug 'vhda/verilog_systemverilog.vim'
@@ -159,12 +165,16 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
 " choose your own colorsheme: https://vimcolors.com
+" create your own colorsheme: https://github.com/lifepillar/vim-colortemplate
 Plug 'morhetz/gruvbox'
 Plug 'tomasr/molokai'
 Plug 'jnurmine/Zenburn'
 Plug 'altercation/vim-colors-solarized'
 Plug 'rainux/vim-desert-warm-256'
 Plug 'joshdick/onedark.vim'
+Plug 'NLKNguyen/papercolor-theme'
+Plug 'arzg/vim-colors-xcode'
+Plug 'cormacrelf/vim-colors-github'
 " Plug 'chriskempson/base16-vim'
 " Plug 'flazz/vim-colorschemes'
 
@@ -428,6 +438,9 @@ nnoremap <C-F10> :!ctags -R --sort=yes --c++-kinds=+p --fields=+iaS --extra=+q .
 " ----------------------------------------------------------------------------
 "  <leader> shortcuts
 " ----------------------------------------------------------------------------
+
+" Background swith
+nnoremap <Leader>bb :call ToggleBackground()<cr>
 
 " Markdown headings
 nnoremap <leader>1 m`yypVr=``
@@ -741,6 +754,24 @@ endfunction
 " ----------------------------------------------------------------------------
 command! -nargs=1 OpenURL :call system('firefox <q-args>')
 
+" ----------------------------------------------------------------------------
+" ToggleBackground
+" ----------------------------------------------------------------------------
+fun! ToggleBackground()
+    if (&background == "light")
+        set background=dark
+        colorscheme gruvbox
+        execute 'AirlineTheme wombat'
+    else
+        set background=light
+        colorscheme github
+        " colorscheme xcodelighthc
+        execute 'AirlineTheme papercolor'
+    endif
+    call rainbow_main#load()
+    " auto colorsheme * call rainbow_main#load()
+endfun
+
 " }}}
 " ============================================================================
 " PLUGINS {{{
@@ -784,10 +815,12 @@ let g:easy_align_delimiters = {
 " rainbow_parentheses
 " ----------------------------------------------------------------------------
 let g:rainbow_active = 1
+let lightcolors = ['cyan','red','green','magenta','blue','yellow','red','magenta']
+let darkcolors  = ['DarkBlue','Magenta','Black','Red','DarkGray','DarkGreen','DarkYellow']
 " rainbow_conf  {{{
 let g:rainbow_conf = {
-      \ 'guifgs':   ['yellow','blue','red','green','magenta','cyan','red','magenta'],
-      \ 'ctermfgs': ['yellow','blue','red','green','magenta','cyan','red','magenta'],
+      \ 'guifgs':   lightcolors,
+      \ 'ctermfgs': lightcolors,
       \ 'operators': '_,_',
       \ 'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
       \ 'separately': {
@@ -908,6 +941,22 @@ let g:syntastic_style_warning_symbol    = '⚠'
 " ----------------------------------------------------------------------------
 " polyglot (already enable with syntastic)
 " ----------------------------------------------------------------------------
+"RG: bug with vimtex plugin: let g:polyglot_disabled = ['latex']
+
+" ----------------------------------------------------------------------------
+" vimtex
+" ----------------------------------------------------------------------------
+" Disable overfull/underfull \hbox and all package warnings
+let g:vimtex_quickfix_latexlog = {
+            \ 'overfull' : 0,
+            \ 'underfull' : 0,
+            \ 'packages' : {
+            \   'default' : 0,
+            \ },
+            \}
+let g:vimtex_quickfix_mode=0
+set conceallevel=1
+let g:tex_conceal='abdmg'
 let g:polyglot_disabled = ['latex']
 
 " ----------------------------------------------------------------------------

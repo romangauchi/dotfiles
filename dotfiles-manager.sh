@@ -209,6 +209,23 @@ function install_nerdfonts
   cd $currentdir
 }
 
+## Install Powerline fonts (from github repo)
+# parameter(1): name on the powerline font
+function install_powerline_fonts
+{
+  local giturl="https://github.com/powerline/fonts.git"
+  local cloneopt="--depth=1"
+  local currentdir="$(pwd)"
+  # clone the repo
+  echo -e "${GREEN}> Downloading $1 fonts${ENDC}"
+  git clone $giturl $cloneopt
+  # install the fonts (in ./local/share/fonts)
+  cd fonts && ./install.sh ${1} && cd ..
+  # destroy the repo (because all fonts are installed)
+  rm -rf fonts
+  cd $currentdir
+}
+
 ## Install Tmux plugin manager
 function install_tpm
 {
@@ -230,9 +247,11 @@ function install_deps
   local fontversion="v2.1.0" # Feb. 02, 2020
   if [[ -z $DRYRUN ]]; then
     install_nerdfonts $fontname $fontversion
+    # install_powerline_fonts $fontname
     install_tpm
   else
     echo "> Install $fontname Nerd Fonts ($fontversion)"
+    # echo "> Install $fontname Powerline Fonts (from github)"
     echo "> Install Tmux plugin manager (from github)"
   fi
 }

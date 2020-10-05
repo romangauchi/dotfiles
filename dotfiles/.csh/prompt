@@ -104,6 +104,8 @@ alias postcmd '\\
     unset prompted;\\
 '
 
+# TODO: implement git status command with: https://github.com/romkatv/gitstatus
+
 # display before prompt
 alias precmd '\\
   init_precmd;\\

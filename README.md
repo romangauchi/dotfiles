@@ -19,8 +19,9 @@ cd dotfiles
 
 The `dotfiles-manager.sh` installs the following dependencies on your system:
 
-- **Nerd Fonts**: project including glyph (icons) from popular fonts as *Font Awesome*, *Powerline*, *Devicons* on [github](https://github.com/ryanoasis/nerd-fonts).
 - **Tmux Plugin Manager**: support plugins on `Tmux` [github](https://github.com/tmux-plugins/tpm#installation).
+- **Nerd Fonts**: support glyph/icons from popular fonts as *Font Awesome*, *Powerline*, *Devicons* on [github](https://github.com/ryanoasis/nerd-fonts).
+- **Powerline Fonts**: (not used) pre-patched fonts for usage with the *Powerline* statusline plugin on [github](https://github.com/powerline/fonts).
 
 ### `dotfiles-manager.sh`
 
