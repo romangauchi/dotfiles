@@ -116,6 +116,7 @@ Plug 'dhruvasagar/vim-table-mode'
 Plug 'scrooloose/syntastic', { 'on': 'SyntasticCheck' }
 
 """ Syntax highlighting, indentation support
+let g:polyglot_disabled = ['latex']
 Plug 'sheerun/vim-polyglot'
 
 """ LateX
@@ -946,18 +947,10 @@ let g:syntastic_style_warning_symbol    = '⚠'
 " ----------------------------------------------------------------------------
 " vimtex
 " ----------------------------------------------------------------------------
-" Disable overfull/underfull \hbox and all package warnings
-let g:vimtex_quickfix_latexlog = {
-            \ 'overfull' : 0,
-            \ 'underfull' : 0,
-            \ 'packages' : {
-            \   'default' : 0,
-            \ },
-            \}
-let g:vimtex_quickfix_mode=0
 set conceallevel=1
+let g:vimtex_quickfix_mode=0
 let g:tex_conceal='abdmg'
-let g:polyglot_disabled = ['latex']
+let g:tex_flavor='latex'
 
 " ----------------------------------------------------------------------------
 " jedi-vim

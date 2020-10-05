@@ -4,7 +4,10 @@
 ##  Local bashrc first hook
 #####################################
 
-[ -f ${HOME}/.zsh/zshrc.first ] && source ${HOME}/.zsh/.zshrc.first
+[ -f ${HOME}/.zsh/zshrc.first ] && source ${HOME}/.zsh/zshrc.first
+
+# include oh-my-zsh environment
+[ -f ${HOME}/.zsh/plugins ] && source ${HOME}/.zsh/plugins
 
 #####################################
 ##  Shell customization
@@ -12,7 +15,6 @@
 
 [ -f ${HOME}/.zsh/shell_customization ] && source ${HOME}/.zsh/shell_customization
 
-# include oh-my-zsh environment
 [ -f ${HOME}/.zsh/prompt ] && source ${HOME}/.zsh/prompt
 
 #####################################
