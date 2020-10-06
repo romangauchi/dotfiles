@@ -68,7 +68,7 @@ alias   tvim='tmux split-window vim'
 
 # Custom
 alias     po='poweroff'
-alias    maj='yay; echo; upgrade_oh_my_zsh; echo; upgrade_powerlevel9k'
+alias    maj='yay; echo; update_ohmyzsh; echo; update_omz_plugins'
 alias      a='cat ~/.zsh/aliases'
 alias     aa='vim ~/.zsh/zshrc.perso'
 alias    aaa='source ~/.zshrc'
@@ -90,6 +90,10 @@ alias   image='web_search ddg \!i'
 alias  whatip='curl -s http://whatismyip.akamai.com; echo'
 alias weather='curl fr.wttr.in/grenoble'
 
+# LaTeX
+alias     lpdf='pdflatex -shell-escape'
+pdfmerge () { of=$1; shift; pdftk $* cat output $of}
+
 # Vim
 cleanvim () { find $* -name ".*.sw*" -delete ; }
 
@@ -101,12 +105,14 @@ dict-fr-en     () { dict $1 fd-fra-eng ; }
 dict-en-fr     () { dict $1 fd-eng-fra ; }
 tlfi () { lynx -dump http://www.cnrtl.fr/definition/$1 | awk '/\]options d.affichage/,/XHTML/ {print}' | perl -ne 'print unless 1../^$/ or eof' ; }
 
-# powerlevel9k
-upgrade_powerlevel9k() {
-  echo -e "\033[0;32mUpdating PowerLevel9k\033[0m"
-  cd ~/.oh-my-zsh/custom/themes/powerlevel9k
-  git pull origin master
-  cd - > /dev/null
+# Update oh-my-zsh custom plugins & themes
+update_omz_plugins() {
+  for repo in ${ZSH_CUSTOM}/plugins/* ${ZSH_CUSTOM}/themes/*; do
+    if [[ -d $repo/.git ]]; then
+        echo -e "\033[0;32mUpdating $(basename $repo)\033[0m"
+        cd $repo && git pull origin && cd - > /dev/null
+    fi
+  done
 }
 
 # Web search from terminal
