@@ -14,4 +14,4 @@ set guitablabel=%t%m
 set showtabline=1
 
 " to display at least 50 lines when starting
-set lines=50
+set lines=50 columns=100

@@ -9,28 +9,48 @@ if [ ! -d ~/.oh-my-zsh ]; then
     sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
 fi
 export OMZ="$HOME/.oh-my-zsh"
-export ZSH_CUSTOM="$ZSH/custom"
+export ZSH_CUSTOM="$OMZ/custom"
 
-# Powerlevel9k theme
-if [ ! -d ${ZSH_CUSTOM}/themes/powerlevel9k ]; then
-    git clone https://github.com/bhilburn/powerlevel9k.git ${ZSH_CUSTOM}/themes/powerlevel9k
-fi
-# # RG: just a better wizard installer # Powerlevel10k theme
-# if [ ! -d ${ZSH_CUSTOM}/themes/powerlevel10k ]; then
-#     git clone https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM}/themes/powerlevel10k
-# fi
-# Auto-suggestions
-if [ ! -d ${ZSH_CUSTOM}/plugins/zsh-autosuggestions ]; then
-    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM}/plugins/zsh-autosuggestions
-fi
-# Completions
-if [ ! -d ${ZSH_CUSTOM}/plugins/zsh-completions ]; then
-    git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM}/plugins/zsh-completions
-fi
-# Synthax highlighting
-if [ ! -d ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting ]; then
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting
-fi
+# Auto-install plugins or themes into the oh-my-zsh custom dir
+# $1: short github url, $2: plugins or themes
+function Plugin() {
+    local giturl=$1  # https://github.com/...
+    local basedir=$2 # themes or plugins
+    local name=$(basename ${giturl%.*})
+    if [ ! -d ${ZSH_CUSTOM}/$basedir/$name ]; then
+        git clone "https://github.com/$giturl" ${ZSH_CUSTOM}/$basedir/$name
+    fi
+}
+
+## Powerlevel9k theme
+Plugin "bhilburn/powerlevel9k" themes
+
+## Powerlevel10k theme
+# RG: just a better wizard installer: Plugin 'romkatv/powerlevel10k' themes
+
+## Auto-suggestions
+Plugin 'zsh-users/zsh-autosuggestions' plugins
+
+## Completions
+Plugin 'zsh-users/zsh-completions' plugins
+
+## Synthax highlighting
+# Plugin 'zsh-users/zsh-syntax-highlighting' plugins
+
+## History substring search
+# Plugin 'zsh-users/zsh-history-substring-search' plugins
+
+# Enabled plugins (in ~/.oh-my-zsh/custom/plugins/*)
+plugins=(
+    git
+    python
+    pyenv
+    colorize
+    zsh-autosuggestions
+    zsh-completions
+    # zsh-syntax-highlighting
+    # zsh-history-substring-search
+)
 
 ### Other settings
 

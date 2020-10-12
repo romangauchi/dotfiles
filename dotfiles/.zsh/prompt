@@ -4,11 +4,9 @@
 ##  Shell prompt
 #####################################
 
-# Plugins (standard: ~/.oh-my-zsh/plugins/*)
-plugins=(git python pyenv colorize zsh-autosuggestions zsh-completions)
-
 # Auto-suggestions
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#878787"
+# ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history completion)
 
 # Theme
 ZSH_THEME="powerlevel9k/powerlevel9k"
