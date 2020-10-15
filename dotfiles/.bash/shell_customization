@@ -40,6 +40,7 @@ bind '"[4~": end-of-line'             # End
 bind '"[1;5D": backward-word'         # Ctrl + Right (enable by default)
 bind '"[1;5C": forward-word'          # Ctrl + Left (enable by default)
 bind '"\C-u": kill-whole-line'          # Ctrl + U (change default behavior)
+bind '"\C-h": backward-kill-word'       # Ctrl + Backspace
 bind '"\e/": dabbrev-expand'
 bind '"\e ": history-expand-line'
 bind -x '"\ez": "fg"'

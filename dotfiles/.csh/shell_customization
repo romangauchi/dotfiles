@@ -31,8 +31,9 @@ bindkey "[4~" end-of-line             # End
 bindkey "[1;5D" backward-word         # Ctrl + Right
 bindkey "[1;5C" forward-word          # Ctrl + Left
 bindkey "^W" backward-delete-word       # Ctrl + W
+bindkey "^H" backward-delete-word       # Ctrl + Backspace
 bindkey "^R" i-search-back              # Ctrl + R
-bindkey "."   insert-last-word
+bindkey "." insert-last-word
 bindkey -c "z" "fg"
 
 #####################################

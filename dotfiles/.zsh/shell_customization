@@ -17,8 +17,7 @@ bindkey "^[OF" end-of-line              # [End]
 bindkey "^[[H" beginning-of-line        # [Home]
 bindkey "^[[F" end-of-line              # [End]
 
-# bindkey "^H" backward-delete-word       # [Ctrl+Backspace]
-# bindkey "^?" backward-delete-char       # [Backspace]
+bindkey "\C-h"  backward-kill-word      # [Ctrl+Backspace]
 bindkey '^[[1;5C' forward-word          # [Ctrl-RightArrow]
 bindkey '^[[1;5D' backward-word         # [Ctrl-LeftArrow]
 
