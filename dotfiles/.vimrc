@@ -349,20 +349,6 @@ noremap <C-Up>      10k
 inoremap <C-Down>   <C-o>10j
 inoremap <C-Up>     <C-o>10k
 
-" Change behavior when lines is wrapped
-noremap <silent>k   gk
-noremap <silent>j   gj
-noremap <silent>0   g0
-noremap <silent>$   g$
-noremap <Up>        gk
-noremap <Down>      gj
-noremap <Home>      g0
-noremap <End>       g$
-inoremap <Up>       <C-o>gk
-inoremap <Down>     <C-o>gj
-inoremap <Home>     <C-o>g0
-inoremap <End>      <C-o>g$
-
 " ----------------------------------------------------------------------------
 " Ctrl+ mappings
 " ----------------------------------------------------------------------------
@@ -390,7 +376,8 @@ inoremap <expr> <C-H> <sid>check_blank_line() ? "<C-H>" : "<C-\><C-o>db"
 inoremap <expr> <C-BS> <sid>check_blank_line() ? "<C-BS>" : "<C-\><C-o>db"
 " TODO: <Ctrl+Delete> | Forward word deletion
 " RG: fixdel issues (no mappings)
-" inoremap <C-Delete> <C-\><C-o>dw
+" set t_kD=[3~
+" inoremap <C-Del> <C-\><C-o>dw
 
 " ----------------------------------------------------------------------------
 " Fn mappings
@@ -412,8 +399,8 @@ inoremap <F6> <esc>:nohlsearch<cr>
 nnoremap <C-F6> :set list!<cr>
 inoremap <C-F6> <esc>:set list!<cr>
 " <F7> | set wrap!
-nnoremap <F7> :set wrap!<cr>
-inoremap <F7> <esc>:set wrap!<cr>
+nnoremap <F7> :call ToggleWrap()<cr>
+inoremap <F7> <esc>:call ToggleWrap()<cr>
 " <Ctrl+F7> | toggle paste mode
 " <F8> | open the file under the cursor vertically splitted
 nnoremap <F8> :vertical wincmd f<cr>
@@ -758,7 +745,7 @@ command! -nargs=1 OpenURL :call system('firefox <q-args>')
 " ----------------------------------------------------------------------------
 " ToggleBackground
 " ----------------------------------------------------------------------------
-fun! ToggleBackground()
+function! ToggleBackground()
     if (&background == "light")
         set background=dark
         colorscheme gruvbox
@@ -771,7 +758,59 @@ fun! ToggleBackground()
     endif
     call rainbow_main#load()
     " auto colorsheme * call rainbow_main#load()
-endfun
+endfunction
+
+" ----------------------------------------------------------------------------
+" ToggleWrap
+" (https://vim.fandom.com/wiki/Move_cursor_by_display_lines_when_wrapping)
+" ----------------------------------------------------------------------------
+function ToggleWrap()
+  if &wrap
+    setlocal nowrap
+    silent! nunmap <buffer> <Up>
+    silent! nunmap <buffer> <Down>
+    silent! nunmap <buffer> <Home>
+    silent! nunmap <buffer> <End>
+    silent! iunmap <buffer> <Up>
+    silent! iunmap <buffer> <Down>
+    silent! iunmap <buffer> <Home>
+    silent! iunmap <buffer> <End>
+  else
+    setlocal wrap
+    noremap  <buffer> <silent> <Up>   gk
+    noremap  <buffer> <silent> <Down> gj
+    noremap  <buffer> <silent> <Home> g<Home>
+    noremap  <buffer> <silent> <End>  g<End>
+    inoremap <buffer> <silent> <Up>   <C-o>gk
+    inoremap <buffer> <silent> <Down> <C-o>gj
+    inoremap <buffer> <silent> <Home> <C-o>g<Home>
+    inoremap <buffer> <silent> <End>  <C-o>g<End>
+  endif
+endfunction
+
+function! s:noremap_normal_cmd(key, preserve_omni, ...)
+  let cmd = ''
+  let icmd = ''
+  for x in a:000
+    let cmd .= x
+    let icmd .= "<C-\\><C-O>" . x
+  endfor
+  execute ":nnoremap <silent> " . a:key . " " . cmd
+  execute ":vnoremap <silent> " . a:key . " " . cmd
+  if a:preserve_omni
+    execute ":inoremap <silent> <expr> " . a:key . " pumvisible() ? \"" . a:key . "\" : \"" . icmd . "\""
+  else
+    execute ":inoremap <silent> " . a:key . " " . icmd
+  endif
+endfunction
+
+" Cursor moves by screen lines
+call s:noremap_normal_cmd("<Up>", 1, "gk")
+call s:noremap_normal_cmd("<Down>", 1, "gj")
+
+" PageUp/PageDown preserve relative cursor position
+call s:noremap_normal_cmd("<PageUp>", 0, "<C-U>", "<C-U>")
+call s:noremap_normal_cmd("<PageDown>", 0, "<C-D>", "<C-D>")
 
 " }}}
 " ============================================================================
@@ -994,8 +1033,8 @@ let g:SuperTabContextTextOmniPrecedence     = ['&completefunc:<c-x><c-u>', '&omn
 
 " to feel completion menu of other IDEs 
 " (https://vim.fandom.com/wiki/Improve_completion_popup_menu)
-inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
-inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
+" RG: s:noremap_normal_cmd: inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
+" RG: s:noremap_normal_cmd: inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
 inoremap <expr> <PageDown> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<PageDown>"
 inoremap <expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<PageUp>"
 inoremap <expr> <cr>       pumvisible() ? "\<C-y>" : "\<cr>"
