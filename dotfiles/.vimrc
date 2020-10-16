@@ -807,6 +807,8 @@ endfunction
 " Cursor moves by screen lines
 call s:noremap_normal_cmd("<Up>", 1, "gk")
 call s:noremap_normal_cmd("<Down>", 1, "gj")
+call s:noremap_normal_cmd("<Home>", 0, "g<Home>")
+call s:noremap_normal_cmd("<End>", 0, "g<End>")
 
 " PageUp/PageDown preserve relative cursor position
 call s:noremap_normal_cmd("<PageUp>", 0, "<C-U>", "<C-U>")
