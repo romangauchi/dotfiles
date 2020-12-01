@@ -117,9 +117,9 @@ bindsym $mod+Ctrl+Right move right
 # ----------------------------------------------------------------------------
 
 # Screen brightness
-bindsym XF86MonBrightnessUp exec "xbacklight -inc 10; notify-send 'brightness up'"
-bindsym XF86MonBrightnessDown exec "xbacklight -dec 10; notify-send 'brightness down'"
-bindsym XF86Display exec "arandr"
+bindsym XF86MonBrightnessUp   exec --no-startup-id "~/.i3/scripts/brightness.sh up"
+bindsym XF86MonBrightnessDown exec --no-startup-id "~/.i3/scripts/brightness.sh down"
+bindsym XF86Display           exec "arandr"
 
 # Audio controls
 bindsym XF86AudioRaiseVolume exec --no-startup-id "~/.i3/scripts/volume.sh up"
