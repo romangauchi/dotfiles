@@ -68,7 +68,7 @@ alias   tvim='tmux split-window vim'
 
 # Custom
 alias     po='poweroff'
-alias    maj='yay; echo; update_ohmyzsh; echo; update_omz_plugins'
+alias    maj='yay; echo; omz update; echo; update_omz_plugins'
 alias      a='cat ~/.zsh/aliases'
 alias     aa='vim ~/.zsh/zshrc.perso'
 alias    aaa='source ~/.zshrc'

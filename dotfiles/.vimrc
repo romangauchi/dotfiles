@@ -158,6 +158,10 @@ Plug 'maralla/completor.vim'
 " :nmap <leader>m :call VimuxRunCommand("make")<cr>
 Plug 'benmills/vimux'
 
+""" Org-mode: interactive dates, folding, ... for task management
+Plug 'jceb/vim-orgmode'
+Plug 'tpope/vim-speeddating'
+
 " ----------------------------------------------------------------------------
 " Colors
 " ----------------------------------------------------------------------------
@@ -1084,9 +1088,9 @@ if $powerline == 1 || has("gui_running")
 else
   let g:airline_powerline_fonts = 0
 endif
-let g:airline_theme                                     = 'wombat'
-let g:airline#extensions#whitespace#trailing_format     = '\s\+$:%s'
-let g:airline#extensions#whitespace#mixed_indent_format = '^\t\s:%s'
+" let g:airline_theme                                     = 'wombat'
+let g:airline#extensions#whitespace#trailing_format     = 'tr[%s]'
+let g:airline#extensions#whitespace#mixed_indent_format = 'mi[%s]'
 let g:airline#extensions#tabline#enabled                = 1
 let g:airline#extensions#tabline#buffer_nr_show         = 1
 let g:airline#extensions#tagbar#enabled                 = 0
