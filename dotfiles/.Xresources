@@ -163,7 +163,7 @@ URxvt*font:           xft:DejaVuSansMono NF:style=Book:autohint=true:size=12
 URxvt*fontBold:       xft:DejaVuSansMono NF:style=Bold:autohint=true:size=12
 URxvt*italicFont:     xft:DejaVuSansMono NF:style=Oblique:autohint=ture:size=12
 URxvt*boldItalicFont: xft:DejaVuSansMono NF:style=Bold Oblique:autohint=true:size=12
-!URxvt*.letterSpace:   0
+URxvt*.letterSpace:   -1
 !URxvt*.lineSpace:     0
 URxvt*dynamicColors: on
 URxvt*termName: xterm-256color

@@ -5,7 +5,7 @@
 #####################################
 
 # Auto-suggestions
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#878787"
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=245"
 # ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history completion)
 
 # Theme
