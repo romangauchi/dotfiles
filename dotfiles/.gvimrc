@@ -7,7 +7,7 @@ set guioptions-=l
 set guioptions-=L
 
 " police du gui
-set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 12
+set guifont=DejaVuSansMono\ NF\ 12
 
 " Contenu des onglets
 set guitablabel=%t%m

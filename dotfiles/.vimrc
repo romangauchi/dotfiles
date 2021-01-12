@@ -544,6 +544,9 @@ nnoremap U :UndotreeToggle<CR>
 nnoremap gss :SplitjoinSplit<cr>
 nnoremap gsj :SplitjoinJoin<cr>
 
+" force saving when in a read-only file (root)
+cmap w!! %!sudo tee > /dev/null %
+
 " }}}
 " ============================================================================
 " FUNCTIONS & COMMANDS {{{
