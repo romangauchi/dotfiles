@@ -1,0 +1,26 @@
+[global_config]
+[keybindings]
+[profiles]
+  [[default]]
+    allow_bold = False
+    icon_bell = False
+    background_color = "#222222"
+    cursor_color = "#fdf6e3"
+    font = DejaVuSansMono Nerd Font Mono 11
+    foreground_color = "#fdf6e3"
+    show_titlebar = False
+    scrollbar_position = hidden
+    scrollback_infinite = True
+    palette = "#2c2c2c:#ff3936:#7da214:#f0dfaf:#9ab8d7:#dc8cc3:#268bd2:#fdf6e3:#2c2c2c:#ff3936:#7da214:#f0dfaf:#9ab8d7:#dc8cc3:#268bd2:#fdf6e3"
+    use_system_font = False
+    bold_is_bright = True
+    background_image = None
+[layouts]
+  [[default]]
+    [[[window0]]]
+      type = Window
+      parent = ""
+    [[[child1]]]
+      type = Terminal
+      parent = window0
+[plugins]
