@@ -454,6 +454,9 @@ nnoremap <leader>nn :set relativenumber!<cr>
 " <leader>ss | toggle the spell checking
 nnoremap <leader>ss :setlocal spell!<cr>
 
+" <leader>ss | launch the grammarous checking
+nnoremap <leader>gg :GrammarousCheck<cr>
+
 " vim-fugitive
 nmap     <leader>gs :Gstatus<cr>gg<c-n>
 nnoremap <leader>gd :Gdiff<cr>
@@ -515,6 +518,22 @@ nnoremap zp [s
 nnoremap zl z=
 " zg | good word list
 " zw | bad word list
+
+" grammarous
+let g:grammarous#hooks = {}
+function! g:grammarous#hooks.on_check(errs) abort
+  nmap <buffer><C-n> <Plug>(grammarous-move-to-next-error)
+  nmap <buffer><C-p> <Plug>(grammarous-move-to-previous-error)
+  nmap <buffer><C-i> <Plug>(grammarous-remove-error)
+  nmap <buffer><C-l> <Plug>(grammarous-fixit)
+endfunction
+
+function! g:grammarous#hooks.on_reset(errs) abort
+  nunmap <buffer><C-n>
+  nunmap <buffer><C-p>
+  nunmap <buffer><C-i>
+  nunmap <buffer><C-l>
+endfunction
 
 " Quickfix
 nnoremap ]q :cnext<cr>zz
@@ -999,6 +1018,17 @@ set conceallevel=1
 let g:vimtex_quickfix_mode=0
 let g:tex_conceal='abdmg'
 let g:tex_flavor='latex'
+
+" ----------------------------------------------------------------------------
+" grammarous
+" ----------------------------------------------------------------------------
+let g:grammarous#default_comments_only_filetypes = {
+      \ '*' : 1, 'help' : 0, 'markdown' : 0,
+      \ }
+
+let g:grammarous#disabled_rules = {
+      \ '*' : ['ARROWS'], 
+      \ }
 
 " ----------------------------------------------------------------------------
 " jedi-vim
