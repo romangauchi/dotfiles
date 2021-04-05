@@ -24,8 +24,11 @@ export SHELL="/bin/bash"
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 # enable color support of ls and also add handy aliases
-# export LS_COLORS
-[ -x /usr/bin/dircolors ] && test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+if [[ "$OSTYPE" == darwin* ]]; then
+  [ `which gdircolors` &> /dev/null ] && test -r $HOME/.dircolors && eval "`gdircolors -b ~/.dircolors`" || eval "`gdircolors -b`"
+elif [[ "$OSTYPE" == linux* ]]; then
+  [ `which dircolors` &> /dev/null ] && test -r $HOME/.dircolors && eval "`dircolors -b ~/.dircolors`" || eval "`dircolors -b`"
+fi
 
 # colored GCC warnings and errors
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'

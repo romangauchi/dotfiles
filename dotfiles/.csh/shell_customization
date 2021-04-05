@@ -1,6 +1,7 @@
-#!/bin/tcsh -f
+#!/bin/tcsh
+
 #####################################
-##  Shell configuration
+##  Shell customization
 #####################################
 
 set history=( 100000 "%h [%Y-%W-%D %T] %R\n" )
@@ -37,7 +38,7 @@ bindkey "." insert-last-word
 bindkey -c "z" "fg"
 
 #####################################
-##  Auto-complétion contextuelle
+##  Auto-completion
 #####################################
 
 set autolist=ambiguous
@@ -67,14 +68,20 @@ set correct=cmd
 #  Default option values
 #====================================
 
-# no color bg in console out of X
-if ( ! ${?colorbg} ) then
-    (xrdb -query) >& /dev/null && setenv colorbg 1 || setenv colorbg 0
-endif
-
-# check if selected in .Xresources
-if ( ! ${?powerline} ) then
-    (xrdb -query | grep -E 'Powerline|Nerd\ Font|DejaVuSansMono\ NF') >& /dev/null && setenv powerline 1 || setenv powerline 0
+# Automatic background colors and powerline font activations (only on linux).
+# For manual activations:
+# $ echo "setenv colorbg 1" >> ~/.csh/cshrc.first
+# $ echo "setenv powerline 1" >> ~/.csh/cshrc.first
+if ( "$OSTYPE" =~ "darwin*" ) then
+  # no color bg in console out of X
+  if ( ! ${?colorbg} ) then
+      (xrdb -query) >& /dev/null && setenv colorbg 1 || setenv colorbg 0
+  endif
+  
+  # check if selected in .Xresources
+  if ( ! ${?powerline} ) then
+      (xrdb -query | grep -E 'Powerline|Nerd\ Font|DejaVuSansMono\ NF') >& /dev/null && setenv powerline 1 || setenv powerline 0
+  endif
 endif
 
 # activate git status by default

@@ -1,4 +1,4 @@
-#!/bin/csh -f
+#!/bin/tcsh
 
 #####################################
 ##  Environment
@@ -28,8 +28,11 @@ setenv LINES
 [ -x /usr/bin/lesspipe ] && eval `env SHELL=/bin/csh lesspipe`
 
 # enable color support of ls and also add handy aliases
-# setenv LS_COLORS
-[ -x /usr/bin/dircolors ] && test -r ~/.dircolors && eval `dircolors -c ~/.dircolors` || eval `dircolors -c`
+if ( "$OSTYPE" =~ "darwin*" ) then
+  [ -n "`which gdircolors`" ] && test -r ~/.dircolors && eval `gdircolors -c ~/.dircolors` || eval `gdircolors -c`
+else if ( "$OSTYPE" =~ "linux*" ) then
+  [ -n "`which dircolors`" ] && test -r ~/.dircolors && eval `dircolors -c ~/.dircolors` || eval `dircolors -c`
+endif
 
 # colored GCC warnings and errors
 setenv GCC_COLORS 'error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'

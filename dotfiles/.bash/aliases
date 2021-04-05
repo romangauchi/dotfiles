@@ -1,8 +1,14 @@
 #!/bin/bash
 
+# MacOS or Linux?
+if [[ "$OSTYPE" == darwin* ]]; then
+  alias   ls='gls --color=auto --time-style=long-iso --group-directories-first'
+else
+  alias   ls='ls --color=auto --time-style=long-iso --group-directories-first'
+fi
+
 # Colors
-alias     ls='ls    --color=auto --time-style=long-iso --group-directories-first'
-alias   grep='grep  --color=auto'
+alias   grep='grep --color=auto'
 alias  fgrep='fgrep --color=auto'
 alias  egrep='egrep --color=auto'
 alias  zgrep='zgrep --color=auto'
@@ -116,7 +122,7 @@ screenkill    () { while [ $# -ne 0 ]; do screen -X -S $1 quit ; shift ; done ; 
 screenkillall () { screen -ls | grep "(" | awk '{print $1}' | xargs -I'{}' screen -X -S {} quit ; }
 svim          () { screen -X split ; screen -X focus ; screen -t "vim" sh -c "vim $@ ; screen -X focus ; screen -X only" ; }
 
-# dictionnaire
+# dictionary
 dict () { curl -s dict://dict.org/d:$1:$2 | perl -ne 's/\r//; print if /^151 /../^\./ and not (/^151 / or /^\./)' ; }
 dict-wordnet   () { dict $1 wn ; }
 dict-thesaurus () { dict $1 moby-thesaurus ; }

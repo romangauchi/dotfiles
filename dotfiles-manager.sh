@@ -14,6 +14,9 @@ DESTDIR="${HOME}"       # home destination directory
 ENVNAME="dotfiles"      # environment (dir) to deploy
 ARCHIVENAME="dotfiles_$(hostname)_$(date +%Y%m%d%H%M%S)" # archive name
 
+FONTNAME="DejaVuSansMono"
+FONTVERSION="v2.1.0" # Feb. 02, 2020
+
 # Add some color to your install
 RED="\033[1;31m"
 GREEN="\033[1;32m"
@@ -23,6 +26,12 @@ MAGENTA="\033[1;35m"
 CYAN="\033[1;36m"
 WHITE="\033[1;37m"
 ENDC="\033[0m"
+
+if [[ "$OSTYPE" == darwin* ]]; then
+  CMD_STAT="stat -f%m"
+else
+  CMD_STAT="stat -c%Y"
+fi
 
 ## Usage function to print some help
 function usage
@@ -121,6 +130,13 @@ function process_opts
   fi
 }
 
+command_exists() {
+  command -v "$@" >/dev/null 2>&1
+}
+
+fmt_error() {
+  printf '%sError: %s%s\n' "${RED}" "$*" "${ENDC}" >&2
+}
 
 ## Synchronize dotfiles function
 function sync_dotfiles
@@ -142,7 +158,7 @@ function sync_dotfiles
       if diff -q $src $dest 2>&1 > /dev/null; then
         echo -en "${GREEN}              Up-to-date${ENDC}"
       else
-        if [[ $(stat -c%Y $src) -gt $(stat -c%Y $dest) ]]; then
+        if [[ `${CMD_STAT} $src` -gt `${CMD_STAT} $dest` ]]; then
           changes="Older"
         else
           changes="Newer"
@@ -243,17 +259,47 @@ function install_tpm
 ## Install (extra) dependencies
 function install_deps
 {
-  local fontname="DejaVuSansMono"
-  local fontversion="v2.1.0" # Feb. 02, 2020
   if [[ -z $DRYRUN ]]; then
-    install_nerdfonts $fontname $fontversion
-    # install_powerline_fonts $fontname
+    case "$OSTYPE" in
+      darwin*)  setup_macos;;
+      linux*)   setup_linux;;
+      *)        fmt_error "platform $OSTYPE not supported"
+                exit 1;;
+    esac
+    install_nerdfonts $FONTNAME $FONTVERSION
+    # install_powerline_fonts $FONTNAME
     install_tpm
   else
-    echo "> Install $fontname Nerd Fonts ($fontversion)"
-    # echo "> Install $fontname Powerline Fonts (from github)"
+    echo "> Install $FONTNAME Nerd Fonts ($FONTVERSION)"
+    # echo "> Install $FONTNAME Powerline Fonts (from github)"
     echo "> Install Tmux plugin manager (from github)"
   fi
+}
+
+## Setup for MacOS from scratch
+function setup_macos
+{
+  echo -e "${GREEN}> Setup requirements for MacOS${ENDC}"
+  if [ `xcode-select -p >/dev/null` ]; then
+    xcode-select --install
+  fi
+  command_exists brew || {
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  }
+  # make sure the system has all requirements
+  brew install git
+  command_exists wget || { brew install wget; }
+  command_exists gls  || { brew install coreutils; }
+  command_exists tree || { brew install tree; }
+  command_exists tmux || { brew install tmux; }
+  command_exists htop || { brew install htop; }
+}
+
+## Setup Linux requirements
+function setup_linux
+{
+  command_exists git  || { fmt_error "git is not installed"; exit 1; }
+  command_exists wget || { fmt_error "wget is not installed"; exit 1; }
 }
 
 ## Upload dotfiles function
@@ -271,7 +317,7 @@ function upload_dotfiles
       if diff -q $src $dest 2>&1 > /dev/null; then
         echo -en "${GREEN}              Up-to-date${ENDC}"
       else
-        if [[ $(stat -c%Y $dest) -gt $(stat -c%Y $src) ]]; then
+        if [[ `${CMD_STAT} $dest` -gt `${CMD_STAT} $src` ]]; then
           changes="Older"
         else
           changes="Newer"

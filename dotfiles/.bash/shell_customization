@@ -1,6 +1,6 @@
 #!/bin/bash
 #####################################
-##  Shell configuration
+##  Shell customization
 #####################################
 
 # don't put duplicate lines in the history. See bash(1) for more options
@@ -46,7 +46,7 @@ bind '"\e ": history-expand-line'
 bind -x '"\ez": "fg"'
 
 #####################################
-#   Auto-complétion contextuelle
+#   Auto-completion
 #####################################
 
 # Perform partial completion on the first <tab> press then start cycling full
@@ -93,11 +93,17 @@ fi
 #  Default option values
 #====================================
 
-# no color bg in console out of X
-[[ -z "${colorbg+unset}" ]] && xrdb -query &> /dev/null && export colorbg=1
+# Automatic background colors and powerline font activations (only on linux).
+# For manual activations:
+# $ echo "export colorbg=1" >> ~/.bash/bashrc.first
+# $ echo "export powerline=1" >> ~/.bash/bashrc.first
+if [[ "$OSTYPE" == linux* ]]; then
+  # no color bg in console out of X
+  [[ -z "${colorbg+unset}" ]] && xrdb -query &> /dev/null && export colorbg=1
   
-# check if selected in .Xresources
-[[ -z "${powerline+unset}" ]] && xrdb -query | grep -E 'Powerline|Nerd\ Font|DejaVuSansMono\ NF' &> /dev/null && export powerline=1
+  # check if selected in .Xresources
+  [[ -z "${powerline+unset}" ]] && xrdb -query | grep -E 'Powerline|Nerd\ Font|DejaVuSansMono\ NF' &> /dev/null && export powerline=1
+fi
 
 # activate git status by default
 [[ -z "${gitstatus+unset}" ]] && export gitstatus=1

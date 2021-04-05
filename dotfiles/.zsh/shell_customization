@@ -31,14 +31,23 @@ bindkey "\e[3~" delete-char             # [Delete]
 
 ### Default option values
 
-# no color bg in console out of X
-[[ -z "${colorbg+unset}" ]] && xrdb -query &> /dev/null && export colorbg=1
+# Automatic background colors and powerline font activations (only on linux).
+# For manual activations:
+# $ echo "export colorbg=1" >> ~/.zsh/zshrc.first
+# $ echo "export powerline=1" >> ~/.zsh/zshrc.first
+if [[ "$OSTYPE" == linux* ]]; then
+  # no color bg in console out of X
+  [[ -z "${colorbg+unset}" ]] && xrdb -query &> /dev/null && export colorbg=1
   
-# check if selected in .Xresources
-[[ -z "${powerline+unset}" ]] && xrdb -query | grep -E 'Powerline|Nerd\ Font|DejaVuSansMono\ NF' &> /dev/null && export powerline=1
+  # check if selected in .Xresources
+  [[ -z "${powerline+unset}" ]] && xrdb -query | grep -E 'Powerline|Nerd\ Font|DejaVuSansMono\ NF' &> /dev/null && export powerline=1
+fi
 
 # activate git status by default
 [[ -z "${gitstatus+unset}" ]] && export gitstatus=1
 
 # use bell as notifier at each prompt
 [[ -z "${prompt_notify+unset}" ]] && export prompt_notify=''
+
+# oh-my-zsh fix: hide completion insecurities warning messages
+[[ "$OSTYPE" == darwin* ]] && export ZSH_DISABLE_COMPFIX=true

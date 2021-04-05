@@ -1,8 +1,14 @@
 #!/bin/zsh
 
+# MacOS or Linux?
+if [[ "$OSTYPE" == darwin* ]]; then
+  alias   ls='gls --color=auto --time-style=long-iso --group-directories-first'
+else
+  alias   ls='ls --color=auto --time-style=long-iso --group-directories-first'
+fi
+
 # Colors
-alias     ls='ls    --color=auto --time-style=long-iso --group-directories-first'
-alias   grep='grep  --color=auto'
+alias   grep='grep --color=auto'
 alias  fgrep='fgrep --color=auto'
 alias  egrep='egrep --color=auto'
 alias  zgrep='zgrep --color=auto'
@@ -68,7 +74,7 @@ alias   tvim='tmux split-window vim'
 
 # Custom
 alias     po='poweroff'
-alias    maj='yay; echo; update_omz_plugins; echo; omz update'
+alias    maj='update_system; echo; update_omz_plugins; echo; omz update'
 alias      a='cat ~/.zsh/aliases'
 alias     aa='vim ~/.zsh/zshrc.perso'
 alias    aaa='source ~/.zshrc'
@@ -88,7 +94,7 @@ alias   image='web_search ddg \!i'
 
 # Others stuffs
 alias  whatip='curl -s http://whatismyip.akamai.com; echo'
-alias weather='curl fr.wttr.in/grenoble'
+alias weather='curl en.wttr.in/slc'
 
 # LaTeX
 alias     lpdf='pdflatex -shell-escape'
@@ -97,7 +103,7 @@ pdfmerge () { of=$1; shift; pdftk $* cat output $of}
 # Vim
 cleanvim () { find $* -name ".*.sw*" -delete ; }
 
-# dictionnaire
+# Dictionary
 dict () { curl -s dict://dict.org/d:$1:$2 | perl -ne 's/\r//; print if /^151 /../^\./ and not (/^151 / or /^\./)' ; }
 dict-wordnet   () { dict $1 wn ; }
 dict-thesaurus () { dict $1 moby-thesaurus ; }
@@ -152,6 +158,18 @@ open_command() {
   else
     nohup $open_cmd "$@" &>/dev/null
   fi
+}
+
+# Use generalized update command
+update_system() {
+  # define the open command
+  case "$OSTYPE" in
+    darwin*)  echo -e "\033[0;32mUpdating Homebrew\033[0m"; brew update; echo; brew upgrade;;
+    linux*)   yay ;;
+    *)        echo "Platform $OSTYPE not supported"
+              return 1
+              ;;
+  esac
 }
 
 # Cleanup env vars

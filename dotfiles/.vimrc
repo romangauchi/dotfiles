@@ -350,8 +350,20 @@ noremap <C-A>       ^
 noremap <C-E>       $
 noremap <C-Down>    10j
 noremap <C-Up>      10k
+noremap <S-Down>    10j
+noremap <S-Up>      10k
 inoremap <C-Down>   <C-o>10j
 inoremap <C-Up>     <C-o>10k
+inoremap <S-Down>   <C-o>10j
+inoremap <S-Up>     <C-o>10k
+
+" Meta key (option key on MacOS)
+noremap <M-Left>    b
+noremap <M-Right>   w
+noremap <M-Down>    10j
+noremap <M-Up>      10k
+inoremap <M-Down>   <C-o>10j
+inoremap <M-Up>     <C-o>10k
 
 " ----------------------------------------------------------------------------
 " Ctrl+ mappings

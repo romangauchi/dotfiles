@@ -6,10 +6,16 @@ set guioptions-=R
 set guioptions-=l
 set guioptions-=L
 
-" police du gui
-set guifont=DejaVuSansMono\ NF\ 12
+" fonts and text size
+if has("unix")
+  if system('uname')=~'Darwin'
+    set guifont=DejaVuSansMono\ NF:h13
+  else
+    set guifont=DejaVuSansMono\ NF\ 12
+  endif
+endif    
 
-" Contenu des onglets
+" tab labels
 set guitablabel=%t%m
 set showtabline=1
 
