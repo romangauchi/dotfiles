@@ -37,8 +37,8 @@
 ##  Cleaning
 #####################################
 
-# uniquify PATH
-# uniquify MANPATH
-# uniquify INFOPATH
-# uniquify LD_LIBRARY_PATH
+uniquify PATH
+uniquify MANPATH
+uniquify INFOPATH
+uniquify LD_LIBRARY_PATH
 

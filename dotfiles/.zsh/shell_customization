@@ -16,14 +16,17 @@ bindkey "^[OF" end-of-line              # [End]
 # for freebsd console
 bindkey "^[[H" beginning-of-line        # [Home]
 bindkey "^[[F" end-of-line              # [End]
-
-bindkey "\C-h"  backward-kill-word      # [Ctrl+Backspace]
-bindkey '^[[1;5C' forward-word          # [Ctrl-RightArrow]
-bindkey '^[[1;5D' backward-word         # [Ctrl-LeftArrow]
-
+# move keys
+bindkey '^[[1;5D' backward-word         # [Ctrl + LeftArrow]
+bindkey '^[[1;2D' backward-word         # [Shft + LeftArrow]
+bindkey '^[[1;5C' forward-word          # [Ctrl + RightArrow]
+bindkey '^[[1;2C' forward-word          # [Shft + RightArrow]
+# delete keys
 bindkey "^[[3~" delete-char             # [Delete]
-bindkey "^[3;5~" delete-char            # [Delete]
 bindkey "\e[3~" delete-char             # [Delete]
+bindkey "\C-h"  backward-kill-word      # [Ctrl + Backspace] [Shft + Backspace]
+bindkey "^[[3;5~" kill-word             # [Ctrl + Delete]
+bindkey "^[[3;2~" kill-word             # [Shft + Delete]
 
 #####################################
 #   Prompt

@@ -94,7 +94,7 @@ alias image   'nohup xdg-open "https://www.duckduckgo.com/?q=\\!i+"` perl -e '"'
 
 # Others stuffs
 alias whatip  'curl -s http://whatismyip.akamai.com; echo'
-alias weather 'curl fr.wttr.in/grenoble'
+alias weather 'curl en.wttr.in/slc'
 
 # LaTeX
 alias lpdf      'pdflatex -shell-escape'

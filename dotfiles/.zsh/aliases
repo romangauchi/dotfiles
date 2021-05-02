@@ -173,7 +173,7 @@ update_system() {
 }
 
 # Cleanup env vars
-prepend  () { if [[ -n "$1"        ]];then export $1="$(perl -e '@items=split(":",$ENV{shift @ARGV});for $arg (reverse @ARGV){@items=grep{$_ ne $arg} @items; unshift @items,$arg}; print(join(":",@items))' "$@" )" ; fi }
-append   () { if [[ -n "$1"        ]];then export $1="$(perl -e '@items=split(":",$ENV{shift @ARGV});for $arg (        @ARGV){@items=grep{$_ ne $arg} @items; push    @items,$arg}; print(join(":",@items))' "$@" )" ; fi }
-remove   () { if [[ -n "${!1+set}" ]];then export $1="$(perl -e '@items=split(":",$ENV{shift @ARGV});for $arg (reverse @ARGV){@items=grep{$_ ne $arg} @items;                    }; print(join(":",@items))' "$@" )" ; fi }
-uniquify () { if [[ -n "${!1+set}" ]];then export $1="$(perl -e '   for(split(":",$ENV{shift @ARGV})){unless(defined$list{$_}){$list{$_}=1;                   push    @items,$_ }}; print(join(":",@items))' "$@" )" ; fi }
+prepend  () { if [[ -n "$1"       ]];then export $1="$(perl -e '@items=split(":",$ENV{shift @ARGV});for $arg (reverse @ARGV){@items=grep{$_ ne $arg} @items; unshift @items,$arg}; print(join(":",@items))' "$@" )" ; fi }
+append   () { if [[ -n "$1"       ]];then export $1="$(perl -e '@items=split(":",$ENV{shift @ARGV});for $arg (        @ARGV){@items=grep{$_ ne $arg} @items; push    @items,$arg}; print(join(":",@items))' "$@" )" ; fi }
+remove   () { if [[ -n "${1+set}" ]];then export $1="$(perl -e '@items=split(":",$ENV{shift @ARGV});for $arg (reverse @ARGV){@items=grep{$_ ne $arg} @items;                    }; print(join(":",@items))' "$@" )" ; fi }
+uniquify () { if [[ -n "${1+set}" ]];then export $1="$(perl -e 'for(split(":",$ENV{shift @ARGV})){ unless(defined$list{$_}){ $list{$_}=1; push @items,$_ }                      }; print(join(":",@items))' "$@" )" ; fi }
