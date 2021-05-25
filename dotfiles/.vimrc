@@ -588,15 +588,15 @@ cmap w!! %!sudo tee > /dev/null %
 " ----------------------------------------------------------------------------
 function! Format()
   if executable('astyle')
-    silent! execute 'norm! mz'
+    silent! norm! mz
     if &ft ==? 'c' || &ft ==? 'hpp' || &ft ==? 'cpp' || &ft ==? 'php'
       set formatprg=astyle\ --style=linux\ --attach-namespaces\ --attach-extern-c\ --attach-closing-while\ --indent-switches\ --indent-continuation=2\ --indent-preproc-define\ --indent-col1-comments\ --pad-comma\ --pad-header\ --unpad-paren\ --align-pointer=type\ --align-reference=type\ --break-one-line-headers\ --keep-one-line-statements\ --convert-tabs\ --close-templates\ --preserve-date
-      silent! execute 'norm! gggqG'
+      silent! norm! gggqG
     endif
-    silent! call RemoveTrailingSpaces()
-    silent! execute 'retab'
-    silent! execute 'gg=G'
-    silent! execute 'norm! `z'
+    silent! call CleanExtraSpaces()
+    silent! retab
+    " silent! norm! gg=G
+    silent! norm! `z
     set formatprg=
   endif
   if executable('python') && &ft ==? 'json'
@@ -905,6 +905,7 @@ let g:rainbow_conf = {
       \ 'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
       \ 'separately': {
       \     'nerdtree': 0,
+      \     'cmake': 0,
       \     '*': {},
       \     'tex': {
       \         'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/'],
@@ -1210,10 +1211,9 @@ augroup end
 " ----------------------------------------------------------------------------
 " for json editing
 " ----------------------------------------------------------------------------
-au! BufRead,BufNewFile *.json set filetype=json
-
 augroup json_autocmd
   au!
+  au BufRead,BufNewFile *.json set filetype=json
   au FileType json set formatoptions=tcq2l
   au FileType json set autoindent expandtab
   au FileType json set foldmethod=syntax
@@ -1229,9 +1229,18 @@ augroup svlog_autocmd
 augroup end
 
 " ----------------------------------------------------------------------------
+" for LLVM human-readable editing
+" ----------------------------------------------------------------------------
+augroup llvm_autocmd
+  au!
+  au BufNewFile,BufRead *.ll set ft=llvm
+augroup end
+
+" ----------------------------------------------------------------------------
 " for tex editing
 " ----------------------------------------------------------------------------
 augroup tex_autocmd
+  au!
   au BufNewFile,BufRead *.tex,*.cls
         \ set nocursorline              |
         \ set completeopt-=i            |

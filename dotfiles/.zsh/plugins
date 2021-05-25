@@ -22,10 +22,20 @@ function Plugin() {
     fi
 }
 
+function LocalPatch() {
+    local filename=$1
+    local currentLine=$2
+    local replacedLine=$3
+    if [ -f ${ZSH_CUSTOM}/$filename ]; then
+        sed -i 's/'$currentLine'/'$replacedLine'/g' ${ZSH_CUSTOM}/$filename
+    fi
+}
+
 ## Powerlevel9k theme
 Plugin "bhilburn/powerlevel9k" themes
+LocalPatch "themes/powerlevel9k/functions/vcs.zsh" 'untrackedFiles="\?\(.*)\)"\?' 'untrackedFiles="\1"'
 
-## Powerlevel10k theme
+## Powerlevel10k theme (zsh 5.1 require)
 # RG: just a better wizard installer: Plugin 'romkatv/powerlevel10k' themes
 
 ## Auto-suggestions
