@@ -365,6 +365,10 @@ noremap <M-Up>      10k
 inoremap <M-Down>   <C-o>10j
 inoremap <M-Up>     <C-o>10k
 
+" Swap lines
+noremap <A-Up>      ddkP
+noremap <A-Down>    ddp
+
 " ----------------------------------------------------------------------------
 " Ctrl+ mappings
 " ----------------------------------------------------------------------------
