@@ -29,21 +29,30 @@ shopt -s checkwinsize
 bind '" ": "$(/usr/bin/printf \"\\u00A0\")"'
 bind 'set bell-style none'              # never ring the bell
 
-# additional bindkeys as in bash
-bind 'set bind-tty-special-chars off'
-bind '"^P": history-search-backward'    # Ctrl + P
-bind '"^N": history-search-forward'     # Ctrl + N
-bind '"\e[A": history-search-backward'  # Up
-bind '"\e[B": history-search-forward'   # Down
-bind '"[1~": beginning-of-line'       # Home
-bind '"[4~": end-of-line'             # End
-bind '"[1;5D": backward-word'         # Ctrl + Right (enable by default)
-bind '"[1;5C": forward-word'          # Ctrl + Left (enable by default)
-bind '"\C-u": kill-whole-line'          # Ctrl + U (change default behavior)
-bind '"\C-h": backward-kill-word'       # Ctrl + Backspace
-bind '"\e/": dabbrev-expand'
-bind '"\e ": history-expand-line'
-bind -x '"\ez": "fg"'
+bind 'set bind-tty-special-chars off'   # allow to override default readline binds
+
+# additional key bindings
+# note: escape sequence could be '\e' or ''
+bind '"^N": history-search-forward'     # [Ctrl + N]
+bind '"^P": history-search-backward'    # [Ctrl + P]
+bind '"\C-u": kill-whole-line'          # [Ctrl + U]
+bind '"\e[4~": end-of-line'             # [End]
+bind '"\e[1~": beginning-of-line'       # [Home]
+bind '"\e[A": history-search-backward'  # [Up]
+bind '"\e[B": history-search-forward'   # [Down]
+# move keys
+bind '"\e[1;5D": backward-word'         # [Ctrl + LeftArrow]
+bind '"\e[1;2D": backward-word'         # [Shft + LeftArrow]
+bind '"\e[1;3D": backward-word'         # [Alt + LeftArrow]
+bind '"\e[1;5C": forward-word'          # [Ctrl + RightArrow]
+bind '"\e[1;2C": forward-word'          # [Shft + RightArrow]
+bind '"\e[1;3C": forward-word'          # [Alt + RightArrow]
+# delete keys
+bind '"\e[3~": delete-char'             # [Delete]
+bind '"\C-h": backward-kill-word'       # [Ctrl/Shft/Alt + Backspace]
+bind '"\e[3;5~": kill-word'             # [Ctrl + Delete]
+bind '"\e[3;2~": kill-word'             # [Shft + Delete]
+bind '"\e[3;3~": kill-word'             # [Alt + Delete]
 
 #####################################
 #   Auto-completion
@@ -67,6 +76,8 @@ bind 'set match-hidden-files off'
 #bind 'TAB:menu-complete'
 # <S-tab> | make cycle backward between possible completions
 bind '"\e[Z": menu-complete-backward'
+# Expand the most recent, preceding word for which this is a prefix
+bind '"\e/": dabbrev-expand'
 
 # Enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile

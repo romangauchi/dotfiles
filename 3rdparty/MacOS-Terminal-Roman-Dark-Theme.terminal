@@ -459,6 +459,8 @@
 	<real>2.0699999999999998</real>
 	<key>RunCommandAsShell</key>
 	<true/>
+	<key>ScrollAlternateScreen</key>
+	<true/>
 	<key>ScrollbackLines</key>
 	<integer>999999999999</integer>
 	<key>SelectionColor</key>
@@ -565,8 +567,6 @@
 	<integer>140</integer>
 	<key>keyMapBoundKeys</key>
 	<dict>
-		<key>#F739</key>
-		<string>toggleNumLock:</string>
 		<key>$007F</key>
 		<string></string>
 		<key>$F700</key>
@@ -603,6 +603,22 @@
 		<string>[24;2~</string>
 		<key>$F728</key>
 		<string>[3;2~</string>
+		<key>$F729</key>
+		<string>[1;2H</string>
+		<key>$F72B</key>
+		<string>[1;2F</string>
+		<key>$F72C</key>
+		<string>[5;2~</string>
+		<key>$F72D</key>
+		<string>[6;2~</string>
+		<key>F700</key>
+		<string>[A</string>
+		<key>F701</key>
+		<string>[B</string>
+		<key>F702</key>
+		<string>[D</string>
+		<key>F703</key>
+		<string>[C</string>
 		<key>F704</key>
 		<string>OP</string>
 		<key>F705</key>
@@ -649,8 +665,22 @@
 		<string>[H</string>
 		<key>F72B</key>
 		<string>[F</string>
+		<key>F72C</key>
+		<string>[5~</string>
+		<key>F72D</key>
+		<string>[6~</string>
+		<key>^$F728</key>
+		<string>[3;6~</string>
 		<key>^007F</key>
 		<string></string>
+		<key>^F700</key>
+		<string>[1;5A</string>
+		<key>^F701</key>
+		<string>[1;5B</string>
+		<key>^F702</key>
+		<string>[1;5D</string>
+		<key>^F703</key>
+		<string>[1;5C</string>
 		<key>^F704</key>
 		<string>[1;5P</string>
 		<key>^F705</key>
@@ -677,6 +707,16 @@
 		<string>[24;5~</string>
 		<key>^F728</key>
 		<string>[3;5~</string>
+		<key>^F729</key>
+		<string>[1;5H</string>
+		<key>^F72B</key>
+		<string>[1;5F</string>
+		<key>^F72C</key>
+		<string>[5;5~</string>
+		<key>^F72D</key>
+		<string>[6;5~</string>
+		<key>~$F728</key>
+		<string>[3;4~</string>
 		<key>~007F</key>
 		<string></string>
 		<key>~F700</key>
@@ -717,13 +757,27 @@
 		<string>[33~</string>
 		<key>~F712</key>
 		<string>[34~</string>
+		<key>~F728</key>
+		<string>[3;3~</string>
+		<key>~F729</key>
+		<string>[1;3H</string>
+		<key>~F72B</key>
+		<string>[1;3F</string>
+		<key>~F72C</key>
+		<string>[5;3~</string>
+		<key>~F72D</key>
+		<string>[6;3~</string>
+		<key>~^$F728</key>
+		<string>[3;8~</string>
 		<key>~^F728</key>
-		<string>[3;5~</string>
+		<string>[3;7~</string>
 	</dict>
 	<key>name</key>
 	<string>Roman Dark</string>
 	<key>rowCount</key>
 	<integer>40</integer>
+	<key>scrollOnInput</key>
+	<true/>
 	<key>shellExitAction</key>
 	<integer>1</integer>
 	<key>type</key>

@@ -22,18 +22,31 @@ alias helpcommand '\!* -h'
 # keyboard
 bindkey -s " " '`/usr/bin/printf "\\u00A0"`'
 
-# additional bindkeys as in csh
-bindkey "^P" history-search-backward    # Ctrl + P
-bindkey "^N" history-search-forward     # Ctrl + N
-bindkey "\e[A" history-search-backward  # Up (enable by default)
-bindkey "\e[B" history-search-forward   # Down (enable by default)
-bindkey "[1~" beginning-of-line       # Home
-bindkey "[4~" end-of-line             # End
-bindkey "[1;5D" backward-word         # Ctrl + Right
-bindkey "[1;5C" forward-word          # Ctrl + Left
-bindkey "^W" backward-delete-word       # Ctrl + W
-bindkey "^H" backward-delete-word       # Ctrl + Backspace
-bindkey "^R" i-search-back              # Ctrl + R
+# additional key bindings
+# note: escape sequence could be '\e' or ''
+bindkey "^N" history-search-forward     # [Ctrl + N]
+bindkey "^P" history-search-backward    # [Ctrl + P]
+bindkey "^R" i-search-back              # [Ctrl + R]
+bindkey "^W" backward-delete-word       # [Ctrl + W]
+bindkey "\e[4~" end-of-line             # [End]
+bindkey "\e[1~" beginning-of-line       # [Home]
+bindkey "\e[A" history-search-backward  # [Up]
+bindkey "\e[B" history-search-forward   # [Down]
+# move keys
+bindkey "\e[1;5D" backward-word         # [Ctrl + LeftArrow]
+bindkey "\e[1;2D" backward-word         # [Shft + LeftArrow]
+bindkey "\e[1;3D" backward-word         # [Alt + LeftArrow]
+bindkey "\e[1;5C" forward-word          # [Ctrl + RightArrow]
+bindkey "\e[1;2C" forward-word          # [Shft + RightArrow]
+bindkey "\e[1;3C" forward-word          # [Alt + RightArrow]
+# delete keys
+bindkey "\e[3~" delete-char             # [Delete]
+bindkey "^H" backward-delete-word       # [Ctrl/Shft/Alt + Backspace]
+bindkey "\e[3;5~" delete-word           # [Ctrl + Delete]
+bindkey "\e[3;2~" delete-word           # [Shft + Delete]
+bindkey "\e[3;3~" delete-word           # [Alt + Delete]
+
+# other keys
 bindkey "." insert-last-word
 bindkey -c "z" "fg"
 

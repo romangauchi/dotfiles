@@ -5,28 +5,31 @@
 #####################################
 
 # additional key bindings
-bindkey "[1~" beginning-of-line       # [Home]
-bindkey "^[[4~" end-of-line             # [End]
+# note: escape sequence could be '\e' or ''
+bindkey "\e[1~" beginning-of-line       # [Home]
+bindkey "\e[4~" end-of-line             # [End]
 # for rxvt
-bindkey "^[[7~" beginning-of-line       # [Home]
-bindkey "^[[8~" end-of-line             # [End]
+bindkey "\e[7~" beginning-of-line       # [Home]
+bindkey "\e[8~" end-of-line             # [End]
 # for non RH/Debian xterm, can't hurt for RH/DEbian xterm
-bindkey "^[OH" beginning-of-line        # [Home]
-bindkey "^[OF" end-of-line              # [End]
+bindkey "\eOH" beginning-of-line        # [Home]
+bindkey "\eOF" end-of-line              # [End]
 # for freebsd console
-bindkey "^[[H" beginning-of-line        # [Home]
-bindkey "^[[F" end-of-line              # [End]
+bindkey "\e[H" beginning-of-line        # [Home]
+bindkey "\e[F" end-of-line              # [End]
 # move keys
-bindkey '^[[1;5D' backward-word         # [Ctrl + LeftArrow]
-bindkey '^[[1;2D' backward-word         # [Shft + LeftArrow]
-bindkey '^[[1;5C' forward-word          # [Ctrl + RightArrow]
-bindkey '^[[1;2C' forward-word          # [Shft + RightArrow]
+bindkey "\e[1;5D" backward-word         # [Ctrl + LeftArrow]
+bindkey "\e[1;2D" backward-word         # [Shft + LeftArrow]
+bindkey "\e[1;3D" backward-word         # [Alt + LeftArrow]
+bindkey "\e[1;5C" forward-word          # [Ctrl + RightArrow]
+bindkey "\e[1;2C" forward-word          # [Shft + RightArrow]
+bindkey "\e[1;3C" forward-word          # [Alt + RightArrow]
 # delete keys
-bindkey "^[[3~" delete-char             # [Delete]
 bindkey "\e[3~" delete-char             # [Delete]
-bindkey "\C-h"  backward-kill-word      # [Ctrl + Backspace] [Shft + Backspace]
-bindkey "^[[3;5~" kill-word             # [Ctrl + Delete]
-bindkey "^[[3;2~" kill-word             # [Shft + Delete]
+bindkey "\C-h" backward-kill-word       # [Ctrl/Shft/Alt + Backspace]
+bindkey "\e[3;5~" kill-word             # [Ctrl + Delete]
+bindkey "\e[3;2~" kill-word             # [Shft + Delete]
+bindkey "\e[3;3~" kill-word             # [Alt + Delete]
 
 #####################################
 #   Prompt
